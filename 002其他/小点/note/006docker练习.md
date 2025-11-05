@@ -4,7 +4,13 @@
 
 ![](../img/docpra-1.png)
 
+## 练习02
 
+![](../img/docpra-1.png)
+
+## 练习03
+
+![](../img/docpra-2.png)
 
 ## 给镜像改名
 

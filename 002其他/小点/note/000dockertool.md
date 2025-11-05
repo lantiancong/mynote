@@ -4,15 +4,10 @@
 
 ```bash
 docker.1ms.run
-docker.domys.cc
-docker.imgdb.de
 docker-0.unsee.tech
 docker.hlmirror.com
-cjie.eu.org
 docker.m.daocloud.io
 hub.rat.dev
-docker.1panel.live
-docker.rainbon.cc
 ```
 
 如拉取redis镜像并运行

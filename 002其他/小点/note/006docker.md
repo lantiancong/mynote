@@ -80,6 +80,18 @@ docker-compose --version
 
 [阿里云](https://www.aliyun.com/)
 
+### 目前可用镜像源(2025/11/05)
+
+```bash
+docker.1ms.run
+docker-0.unsee.tech
+docker.hlmirror.com
+docker.m.daocloud.io
+hub.rat.dev
+```
+
+
+
 详细获取步骤
 
 ![](../img/docker-1.png)
@@ -202,5 +214,129 @@ docker logs
 docker exec
 ```
 
-[练习](C:\Users\1\Desktop\note\002其他\小点\note\006docker - 练习.md)
+[练习](../006docker练习.md)
 
+![](../img/docpra-1.png)
+
+```bash
+docker pull
+docker images
+docker save -o
+docker rmi
+docker load -i
+#不知道的都可以用--help
+
+#查看日志 加 -f 变实时查看
+docker logs -f
+```
+
+### 进程输出格式化
+
+![](../img/docker-8.png)
+
+![](../img/docker-9.png)
+
+## 改完记得 source	~/.bashrc
+
+---
+
+---
+
+## 数据卷
+
+![](../img/docpra-2.png)
+
+![](../img/docker-10.png)
+
+![](../img/docker-11.png)
+
+```bash
+#不用记!!
+docker volume --help
+#全可看
+```
+
+### 默认挂载目录
+
+```bash
+/var/lib/docker/volumes/
+```
+
+### 练习03
+
+![](../img/docpra-3.png)
+
+---
+
+## 自定义镜像
+
+![](../img/docker-12.png)
+
+![](../img/docker-13.png)
+
+Dockerfile
+
+![](../img/docker-14.png)
+
+[视频](https://www.bilibili.com/video/BV1HP4118797?t=1122.1&p=9)
+
+![](../img/docker-15.png)
+
+![](../img/docker-16.png)
+
+![](../img/docker-17.png)
+
+---
+
+## 网络
+
+容器的每次次运行都会获得一个新IP
+
+所以使用IP关联的方式不好
+
+所以
+
+## 自定义网络
+
+**创建新的网桥(网关)**
+
+**可用容器名访问 ! ! ! ! **
+
+![](../img/docker-18.png)
+
+```bash
+#同样,忘记可以使用 --help
+docker network --help
+```
+
+
+
+创建容器的同时加入自定义网桥
+
+![](../img/docker-19.png)
+
+
+
+---
+
+# 部署java应用
+
+## 后端部分
+
+打包(和dockerfile放到一起),构建镜像,运行容器
+
+```bash
+docker build -t
+```
+
+## 前端部署
+
+---
+
+## DockerCompose
+
+![](../img/docker-20.png)
+
+### dockercompose命令
+
+![](../img/docker-21.png)
