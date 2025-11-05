@@ -1,0 +1,171 @@
+@font-face {
+  font-family: "iconfont-skill-builder"; /* Project id 4347622 */
+  src: url('//at.alicdn.com/t/a/font_4347622_errox4kh10q.woff2?t=1733109316051') format('woff2'),
+       url('//at.alicdn.com/t/a/font_4347622_errox4kh10q.woff?t=1733109316051') format('woff'),
+       url('//at.alicdn.com/t/a/font_4347622_errox4kh10q.ttf?t=1733109316051') format('truetype');
+}
+
+.iconfont-skill-builder {
+  font-family: "iconfont-skill-builder" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-skill-builder-edit:before {
+  content: "\e63e";
+}
+
+.icon-skill-builder-delete:before {
+  content: "\e6b7";
+}
+
+.icon-skill-builder-pc:before {
+  content: "\e63d";
+}
+
+.icon-skill-builder-Vector:before {
+  content: "\e603";
+}
+
+.icon-skill-builder-star-empty:before {
+  content: "\e604";
+}
+
+.icon-skill-builder-star-active:before {
+  content: "\e605";
+}
+
+.icon-skill-builder-n-wait:before {
+  content: "\e692";
+}
+
+.icon-skill-builder-stop2:before {
+  content: "\e647";
+}
+
+.icon-skill-builder-history:before {
+  content: "\e648";
+}
+
+.icon-skill-builder-plus:before {
+  content: "\e649";
+}
+
+.icon-skill-builder-terminal:before {
+  content: "\e64a";
+}
+
+.icon-skill-builder-menu:before {
+  content: "\e64b";
+}
+
+.icon-skill-builder-n-help:before {
+  content: "\e64c";
+}
+
+.icon-skill-builder-lists:before {
+  content: "\e64d";
+}
+
+.icon-skill-builder-education:before {
+  content: "\e64e";
+}
+
+.icon-skill-builder-cloud-management:before {
+  content: "\e64f";
+}
+
+.icon-skill-builder-all:before {
+  content: "\e650";
+}
+
+.icon-skill-builder-un-enlarge:before {
+  content: "\e646";
+}
+
+.icon-skill-builder-n-hide:before {
+  content: "\e643";
+}
+
+.icon-skill-builder-enlarge:before {
+  content: "\e640";
+}
+
+.icon-skill-builder-chuangjianzhong-light:before {
+  content: "\e68c";
+}
+
+.icon-skill-builder-n-loading:before {
+  content: "\e68d";
+}
+
+.icon-skill-builder-tingjixiumian:before {
+  content: "\e68e";
+}
+
+.icon-skill-builder-n-success:before {
+  content: "\e690";
+}
+
+.icon-skill-builder-n-error:before {
+  content: "\e691";
+}
+
+.icon-skill-builder-n-warning:before {
+  content: "\e636";
+}
+
+.icon-skill-builder-tiaozhuan:before {
+  content: "\e675";
+}
+
+.icon-skill-builder-copy:before {
+  content: "\e68f";
+}
+
+.icon-skill-builder-arrow-right:before {
+  content: "\e79d";
+}
+
+.icon-skill-builder-n-feedback:before {
+  content: "\e63f";
+}
+
+.icon-skill-builder-right:before {
+  content: "\e609";
+}
+
+.icon-skill-builder-error-dialog:before {
+  content: "\e608";
+}
+
+.icon-skill-builder-info-dialog:before {
+  content: "\e607";
+}
+
+.icon-skill-builder-success-dialog:before {
+  content: "\e606";
+}
+
+.icon-skill-builder-feedback:before {
+  content: "\e62e";
+}
+
+.icon-skill-builder-star:before {
+  content: "\e62d";
+}
+
+.icon-skill-builder-collapse:before {
+  content: "\e62b";
+}
+
+.icon-skill-builder-close:before {
+  content: "\e62a";
+}
+
+.icon-skill-builder-search:before {
+  content: "\e629";
+}
+

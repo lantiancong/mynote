@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8"> 
+  <link rel="canonical" href="https://blog.csdn.net/qq_43233085/article/details/103568563"> 
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+  <meta name="renderer" content="webkit"> 
+  <meta name="force-rendering" content="webkit"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
+  <meta name="report" content="{&quot;pid&quot;: &quot;blog&quot;, &quot;spm&quot;:&quot;1001.2101&quot;}"> 
+  <meta name="referrer" content="always"> 
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="alternate" media="handheld" href="#">  
+  <meta name="applicable-device" content="pc"> 
+  <link href="https://g.csdnimg.cn/static/logo/favicon32.ico" rel="shortcut icon" type="image/x-icon"> 
+  <title>Kali学习 | 信息收集：2.1 枚举服务_smtp-user-enum怎么用-CSDN博客</title>  
+  <meta name="keywords" content="smtp-user-enum怎么用"> 
+  <meta name="csdn-baidu-search" content="{&quot;autorun&quot;:true,&quot;install&quot;:true,&quot;keyword&quot;:&quot;smtp-user-enum怎么用&quot;}"> 
+  <meta name="description" content="文章浏览阅读1k次。这篇博客介绍了Kali Linux中用于信息收集的服务枚举技术，包括DNS枚举和SNMP枚举。DNSenum和fierce用于DNS枚举，能够收集域名信息、执行反向查询和WHOIS请求。Snmpwalk和Snmpcheck用于SNMP枚举，能获取系统信息、设备信息、存储信息、用户账户信息和进程信息。最后提到了smtp-user-enum，一个用于SMTP服务器用户名枚举的工具。
+"> 
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-7d4fe3c84c.min.css">  
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-number/skin-number-2c93789924.min.css">    
+  <meta name="toolbar" content="{&quot;type&quot;:&quot;0&quot;,&quot;fixModel&quot;:&quot;1&quot;}">    
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css"> 
+  <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>      
+ 	<style>
+	main div.blog-content-box pre {
+		max-height: 100%;
+		overflow-y: hidden;
+	}
+	</style>
+ </head>  
+ <body class="nodata  " style=""> 
+  <div id="toolbarBox" style="min-height: 48px;"></div>    
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css"> 
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/swiper/6.0.4/css/swiper.css">   
+  <div class="main_father clearfix d-flex justify-content-center mainfather-concision" style="height:100%;"> 
+   <div class="container clearfix container-concision" id="mainBox">  
+    <main>  
+     <div class="blog-content-box"> 
+      <div class="article-header-box"> 
+       <div class="article-header"> 
+        <div class="article-title-box"> 
+         <h1 class="title-article" id="articleContentId">Kali学习 | 信息收集：2.1 枚举服务</h1> 
+        </div> 
+        <div class="article-info-box"> 
+         <div class="up-time">
+          最新推荐文章于&nbsp;2020-09-09 00:05:09&nbsp;发布
+         </div> 
+         <div class="article-bar-top-box"> 
+          <div class="article-bar-top"> 
+           <img class="article-type-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/original.png" alt=""> 
+           <div class="bar-content"> 
+            <a href="https://mall.csdn.net/vip" data-report-query="spm=3001.10404" data-report-click="{&quot;spm&quot;:&quot;3001.10404&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.10404&quot;}" class="article-vip-box" target="_blank"><img class="article-vip-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/identityVipNew.png" alt=""></a> 
+            <a class="follow-nickName " href="https://blog.csdn.net/qq_43233085" target="_blank" rel="noopener" title="CNwanku">CNwanku</a> 
+            <img class="article-time-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCurrentTime2.png" alt=""> 
+            <span class="time blog-postTime" data-time="2019-12-16 20:03:34">最新推荐文章于&nbsp;2020-09-09 00:05:09&nbsp;发布</span> 
+            <div class="read-count-box"> 
+             <img class="article-read-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/articleReadEyes2.png" alt=""> 
+             <span class="read-count">阅读量1k</span> 
+             <a id="blog_detail_zk_collection" class="un-collection" data-report-click="{&quot;mod&quot;:&quot;popu_823&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4232&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img class="article-collect-img article-heard-img un-collect-status isdefault" style="display:inline-block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect2.png" alt=""> <img class="article-collect-img article-heard-img collect-status isactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive2.png" alt=""> <span class="name">收藏</span> <span class="get-collection"> 4 </span> </a> 
+             <div class="read-count-box is-like" data-type="top"> 
+              <img class="article-read-img article-heard-img" style="display:none" id="is-like-imgactive-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Active.png" alt=""> 
+              <img class="article-read-img article-heard-img" style="display:block" id="is-like-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Black.png" alt=""> 
+              <span class="read-count" id="blog-digg-num">点赞数 </span> 
+             </div> 
+            </div> 
+           </div> 
+          </div> 
+          <div class="operating"> 
+           <a class="href-article-edit slide-toggle">CC 4.0 BY-SA版权</a> 
+          </div> 
+         </div> 
+         <div class="blog-tags-box"> 
+          <div class="tags-box artic-tag-box"> 
+           <span class="label">分类专栏：</span> 
+           <a class="tag-link" href="https://blog.csdn.net/qq_43233085/category_9594079.html" target="_blank" rel="noopener">Kali Linux渗透测试</a> 
+           <span class="label">文章标签：</span> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;linux&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;linux\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;linux&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;linux\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=linux&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">linux</a> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;kali&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;kali\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;kali&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;kali\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=kali&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">kali</a> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;网络安全&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;网络安全\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;网络安全&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;网络安全\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">网络安全</a> 
+          </div> 
+         </div> 
+         <div class="slide-content-box"> 
+          <div class="article-copyright"> 
+           <div class="creativecommons">
+             版权声明：本文为博主原创文章，遵循
+            <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener"> CC 4.0 BY-SA </a>版权协议，转载请附上原文出处链接和本声明。 
+           </div> 
+           <div class="article-source-link">
+             本文链接：
+            <a href="https://blog.csdn.net/qq_43233085/article/details/103568563" target="_blank">https://blog.csdn.net/qq_43233085/article/details/103568563</a> 
+           </div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div id="blogHuaweiyunAdvert" class=""></div> 
+      <div class="ai-abstract-box"> 
+       <div class="ai-abstract"> 
+        <div class="abstract-content"> 
+         <img class="lock-img" src="https://img-home.csdnimg.cn/images/20240711042549.png" alt=""> 这篇博客介绍了Kali Linux中用于信息收集的服务枚举技术，包括DNS枚举和SNMP枚举。DNSenum和fierce用于DNS枚举，能够收集域名信息、执行反向查询和WHOIS请求。Snmpwalk和Snmpcheck用于SNMP枚举，能获取系统信息、设备信息、存储信息、用户账户信息和进程信息。最后提到了smtp-user-enum，一个用于SMTP服务器用户名枚举的工具。 
+        </div> 
+        <p> 摘要生成于 <a href="https://ai.csdn.net?utm_source=cknow_pc_ai_abstract" data-report-query="spm=3001.10128" data-report-view="{&quot;spm&quot;:&quot;3001.10128&quot;,&quot;extra&quot;:{&quot;location&quot;:&quot;ai_abstract&quot;}}" data-report-click="{&quot;spm&quot;:&quot;3001.10128&quot;,&quot;extra&quot;:{&quot;location&quot;:&quot;ai_abstract&quot;,&quot;text&quot;:&quot;C知道&quot;}}" target="_blank"> C知道</a> ，由 DeepSeek-R1 满血版支持， <a href="https://ai.csdn.net?utm_source=cknow_pc_ai_abstract" data-report-query="spm=3001.10128" data-report-click="{&quot;spm&quot;:&quot;3001.10128&quot;,&quot;extra&quot;:{&quot;location&quot;:&quot;ai_abstract&quot;,&quot;text&quot;:&quot;前往体验&quot;}}" target="_blank"> 前往体验 &gt;</a></p> 
+       </div> 
+      </div> 
+      <article class="baidu_pl"> 
+       <div id="article_content" class="article_content clearfix"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-8d6d398833.css"> 
+        <div id="content_views" class="markdown_views prism-atom-one-dark"> 
+         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"> 
+          <path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> 
+         </svg> 
+         <p></p> 
+         <div class="toc"> 
+          <h4>Kali学习 | 信息收集：2.1 枚举服务</h4> 
+          <ul>
+           <li><a href="#_1">枚举服务介绍</a></li>
+           <li><a href="#DNSDNSenum_11">DNS枚举工具DNSenum</a></li>
+           <li><a href="#DNSfierce_34">DNS枚举工具fierce</a></li>
+           <li><a href="#SNMP_Snmpwalk_52">SNMP 枚举工具Snmpwalk</a></li>
+           <li><a href="#SNMPSnmpcheck_75">SNMP枚举工具Snmpcheck</a></li>
+           <li><a href="#SMTP_smtpuserenum_98">SMTP 枚举工具smtp-user-enum</a></li>
+          </ul> 
+         </div> 
+         <p></p> 
+         <h2><a id="_1"></a>枚举服务介绍</h2> 
+         <p><strong>枚举是一类程序，它允许用户从一个网络中收集某一类的所有相关信息</strong>。</p> 
+         <p>本节将介绍<strong>DNS枚举和SNMP枚举技术</strong>。<br> DNS枚举可以收集本地所有DNS服务和相关条目。</p> 
+         <p><strong>DNS枚举</strong>可以帮助用户收集目标组织的关键信息，如用户名、计算机名和IP地址等，为了获取这些信息，用户可以使用DNSenum工具。</p> 
+         <p>要进行<strong>SNMP枚举</strong>，用户需要使用SnmpEnum工具。<br> SnmpEnum是一个强大的SNMP枚举工具，它允许用户分析一个网络内SNMP信息传输。</p> 
+         <h2><a id="DNSDNSenum_11"></a>DNS枚举工具DNSenum</h2> 
+         <p><strong>DNSenum是一款非常强大的域名信息收集工具</strong>。<br> 它能够通过谷歌或者字典文件猜测可能存在的域名，并对一个网段进行反向查询。</p> 
+         <p>它不仅可以查询网站的主机地址信息、域名服务器和邮件交换记录，还可以在域名服务器上执行axfr请求，然后通过谷歌脚本得到扩展域名信息，提取子域名并查询，最后计算C类地址并执行whois查询，执行反向查询，把地址段写入文件。</p> 
+         <p><strong>本小节将介绍使用DNSenum工具检查DNS枚举</strong>。<br> 在终端执行如下所示的命令：</p> 
+         <pre><code class="prism language-bash">dnsenum --enum benet.com
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/7617d34c58664188ab8a6fc400951a92.png" alt="在这里插入图片描述"><br> <strong>输出的信息显示了DNS服务的详细信息</strong>。<br> 其中，包括主机地址、域名服务地址和邮件服务地址。<br> 如果幸运的话，还可以看到一个区域传输。</p> 
+         <p>使用DNSenum工具检查DNS枚举时，可以使用dnsenum的一些<strong>附加选项</strong>，如下所示。<br> <strong>-threads[number]：设置用户同时运行多个进程数。<br> -r：允许用户启用递归查询。<br> -d：允许用户设置WHOIS请求之间时间延迟数（单位为秒）。<br> -o：允许用户指定输出位置。<br> -w：允许用户启用WHOIS请求。</strong></p> 
+         <h2><a id="DNSfierce_34"></a>DNS枚举工具fierce</h2> 
+         <p>fierce工具和DNSenum工具性质差不多，<strong>其fierce主要是对子域名进行扫描和收集信息的。</strong><br> 使用fierce工具获取一个目标主机上所有IP地址和主机信息。<br> 执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">fierce -dns baidu.com
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/b87ee847eaedc80a68e13c9321488a0b.png" alt="在这里插入图片描述"><br> <img src="https://i-blog.csdnimg.cn/blog_migrate/84cbbe5985ae91fa10172680ea6d3dfe.png" alt="在这里插入图片描述"><br> <strong>输出的信息显示了baidu.com下所有的子域</strong>。<br> 从倒数第2行，可以看到总共找到133个条目。<br> 执行以上命令后，输出的内容较多。但是由于篇幅的原因，部分内容使用省略号（……）取代。</p> 
+         <p><strong>用户也可以通过提供一个单词列表执行相同的操作</strong>，执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">fierce-dns baidu.com-wordlist hosts.txt /tmp/output.txt
+</code ></pre> 
+         <h2><a id="SNMP_Snmpwalk_52"></a>SNMP 枚举工具Snmpwalk</h2> 
+         <p><strong>Snmpwalk是一个SNMP应用程序。<br> 它使用SNMP的GETNEXT请求，查询指定的所有OID（SNMP协议中的对象标识）树信息，并显示给用户。</strong></p> 
+         <p>使用Snmpwalk命令测试Windows主机。<br> 执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">snmpwalk-c public 192.168.41,138 -v 2c
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/fd8e79ca643da07bb61928e6e173fd66.png" alt="在这里插入图片描述"><br> <img src="https://i-blog.csdnimg.cn/blog_migrate/a0c7134c2d8dc2dbfc06502b5c08e4ac.png" alt="在这里插入图片描述"><br> 以上输出的信息显示了Windows主机192.168.41.138上的所有信息。</p> 
+         <p><strong>用户也可以使用smmpwak命令枚举安装的软件</strong>。<br> 执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">snmpwalk-c public 192.168.41.138 -v 1 <span class="token function">grep</span> <span class="token operator">|</span> <span class="token function">ftp</span>
+</code ></pre> 
+         <p><strong>使用Snmpwalk工具也可以枚举目标主机上打开的TCP端口</strong>。<br> 执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">snmpwalk -c public 192.168.41.138 -v 1 <span class="token operator">|</span> <span class="token function">grep</span> topConnState <span class="token operator">|</span> <span class="token function">cut</span> -d <span class="token string">"."</span> -f6 <span class="token operator">|</span> <span class="token function">sort</span> -nu
+</code ></pre> 
+         <h2><a id="SNMPSnmpcheck_75"></a>SNMP枚举工具Snmpcheck</h2> 
+         <p><strong>Snmpcheck工具允许用户枚举SNMP设备的同时将结果以可读的方式输出。</strong><br> 下面将演示该工具的使用。<br> 使用Snmpcheck工具通过SNMP协议获取192.168.41.138主机信息。<br> 执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">snmpcheck -t 192.168.41.138
+</code ></pre> 
+         <p>该命令输出信息较多，下面依次讲解每个部分。<br> 首先输出的是<strong>枚举运行信息</strong>。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/ef70bb3f135cf32010b2fad27fa01c1f.png" alt="在这里插入图片描述"><br> （1）<strong>获取系统信息，如主机名、操作系统类型及架构</strong>。结果如下所示：<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/39d81336864e564b632b1eeb4e73a9b3.png" alt="在这里插入图片描述"><br> （2）<strong>获取设备信息，如设备ID号、类型和状态等</strong>。结果如下所示：<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/ba401fc7f7f0543f10ef34319cb2eef4.png" alt="在这里插入图片描述"><br> （3）<strong>获取存储信息，如设备id、设备类型和文件系统类型等</strong>。结果如下所示：<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/fc56a56c28c15725eb12b0c6945bd427.png" alt="在这里插入图片描述"><br> （4）<strong>获取用户账户信息</strong>。结果如下所示：<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/0ee90953026d73c862e2b7e71de3a166.png" alt="在这里插入图片描述"><br> （5）<strong>获取进程信息，如进程ID、进程名和进程类型等</strong>。结果如下所示：<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/1c09536d05da50fcd6452ca36b7e49f4.png" alt="在这里插入图片描述"><br> 还有很多就不一一列举了，感兴趣自己摸索吧。</p> 
+         <h2><a id="SMTP_smtpuserenum_98"></a>SMTP 枚举工具smtp-user-enum</h2> 
+         <p><strong>smtp-user-enum是针对SMTP服务器的25端口，进行用户名枚举的工具，用以探测服务器已存在的邮箱账户。</strong></p> 
+         <p>在SMTP服务上启动用户的SMTP枚举。<br> 执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">smtp-user-enum -M VRFY -U /tmp/users.txt -t 192.168.41.138
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/33cd27e1298e6e49f22f8a710dc8493e.png" alt="在这里插入图片描述"><br> 输出的信息显示了扫描192.168.4l.138主机的详细信息，包括模式、运行进程、用户名文件、用户数和TCP端口等。</p> 
+         <p><strong>参考书籍：《Kali Linux渗透测试技术详解》</strong></p> 
+        </div> 
+        <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/markdown_views-0291849095.css" rel="stylesheet"> 
+        <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/style-e504d6a974.css" rel="stylesheet"> 
+       </div> 
+      </article>  
+     </div> 
+     <div class="directory-boxshadow-dialog" style="display:none;"> 
+      <div class="directory-boxshadow-dialog-box"> 
+      </div> 
+      <div class="vip-limited-time-offer-box-new" id="vip-limited-time-offer-box-new"> 
+       <img class="limited-img limited-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-newWhite.png"> 
+       <div class="vip-limited-time-top">
+         确定要放弃本次机会？ 
+       </div> 
+       <span class="vip-limited-time-text">福利倒计时</span> 
+       <div class="limited-time-box-new"> 
+        <span class="time-hour"></span> 
+        <i>:</i> 
+        <span class="time-minite"></span> 
+        <i>:</i> 
+        <span class="time-second"></span> 
+       </div> 
+       <div class="limited-time-vip-box"> 
+        <p> <img class="coupon-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-roup.png"> <span class="def">立减 ¥</span> <span class="active limited-num"></span> </p> 
+        <span class="">普通VIP年卡可用</span> 
+       </div> 
+       <a class="limited-time-btn-new" href="https://mall.csdn.net/vip" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.9621&quot;}" data-report-query="spm=1001.2101.3001.9621">立即使用</a> 
+      </div> 
+     </div> 
+     <div class="more-toolbox-new more-toolbar" id="toolBarBox"> 
+      <div class="left-toolbox"> 
+       <div class="toolbox-left"> 
+        <div class="profile-box"> 
+         <a class="profile-href" target="_blank" href="https://blog.csdn.net/qq_43233085"><img class="profile-img" src="https://profile-avatar.csdnimg.cn/dd3fa81433184314ba820899e880f86f_qq_43233085.jpg!1"> <span class="profile-name"> CNwanku </span> </a> 
+        </div> 
+        <div class="profile-attend"> 
+         <a class="tool-attend tool-bt-button tool-bt-attend" href="javascript:;" data-report-view="{&quot;mod&quot;:&quot;1592215036_002&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4232&quot;,&quot;extend1&quot;:&quot;已关注&quot;}">已关注</a> 
+         <a class="tool-item-follow active-animation" style="display:none;">已关注</a> 
+        </div> 
+       </div> 
+       <div class="toolbox-middle"> 
+        <ul class="toolbox-list"> 
+         <li class="tool-item tool-item-size tool-active is-like" id="is-like" data-type="bottom"> <a class="tool-item-href"> <img style="display:none;" id="is-like-imgactive-animation-like" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png" alt=""> <img class="isactive" style="display:none" id="is-like-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like-active.png" alt=""> <img class="isdefault" style="display:block" id="is-like-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like.png" alt=""> <span id="spanCount" class="count "> 0 </span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">点赞</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-unlike" id="is-unlike"> <a class="tool-item-href"> <img class="isactive" style="margin-right:0px;display:none" id="is-unlike-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike-active.png" alt=""> <img class="isdefault" style="margin-right:0px;display:block" id="is-unlike-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike.png" alt=""> <span id="unlikeCount" class="count "></span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">踩</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-collection "> <a class="tool-item-href" href="javascript:;" data-report-click="{&quot;mod&quot;:&quot;popu_824&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4130&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img style="display:none" id="is-collection-img-collection" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect-active.png" alt=""> <img class="isdefault" id="is-collection-img" style="display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect.png" alt=""> <img class="isactive" id="is-collection-imgactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png" alt=""> <span class="count get-collection " data-num="4" id="get-collection"> 4 </span> </a> 
+          <div class="tool-hover-tip collect"> 
+           <div class="collect-operate-box"> 
+            <span class="collect-text" id="is-collection"> 收藏 </span> 
+           </div> 
+          </div> 
+          <div class="tool-active-list"> 
+           <div class="text">
+             觉得还不错? 
+            <span class="collect-text" id="tool-active-list-collection"> 一键收藏 </span> 
+            <img id="tool-active-list-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/collectionCloseWhite.png" alt=""> 
+           </div> 
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-item-comment"> 
+          <div class="guide-rr-first"> 
+           <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward01.png" alt=""> 
+           <button class="btn-guide-known">知道了</button> 
+          </div> <a class="tool-item-href go-side-comment" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.7009&quot;}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/comment.png" alt=""> <span class="count"> 0 </span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">评论</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-QRcode" data-type="article" id="tool-share"> <a class="tool-item-href" href="javascript:;" data-report-view="{&quot;spm&quot;:&quot;3001.4129&quot;,&quot;extra&quot;:{&quot;type&quot;:&quot;blogdetail&quot;}}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/share.png" alt=""> <span class="count">分享</span> </a> 
+          <div class="QRcode active" id="tool-QRcode"> 
+           <div class="share-bg-box"> 
+            <div class="share-content"> 
+             <a id="copyPosterUrl" data-type="link" class="btn-share">复制链接</a> 
+            </div> 
+            <div class="share-content"> 
+             <a class="btn-share" data-type="qq">分享到 QQ</a> 
+            </div> 
+            <div class="share-content"> 
+             <a class="btn-share" data-type="weibo">分享到新浪微博</a> 
+            </div> 
+            <div class="share-code"> 
+             <div class="share-code-box" id="shareCode"></div> 
+             <div class="share-code-text"> 
+              <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/share/icon-wechat.png" alt="">扫一扫 
+             </div> 
+            </div> 
+           </div> 
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-more" id="is-more"> <a class="tool-item-href"> <img class="isdefault" style="margin-right:0px;display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/more.png" alt=""> <span class="count"></span> </a> 
+          <div class="more-opt-box"> 
+           <div class="mini-box"> 
+            <a class="tool-item-href" id="toolReportBtnHide"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt=""> <span class="count">举报</span> </a> 
+           </div> 
+           <div class="normal-box"> 
+            <a class="tool-item-href" id="toolReportBtnHideNormal"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt=""> <span class="count">举报</span> </a> 
+           </div> 
+          </div> </li> 
+        </ul> 
+       </div> 
+       <div class="toolbox-right"> 
+        <div class="tool-directory"> 
+         <a class="bt-columnlist-show" data-id="9594079" data-free="true" data-description="Kali Linux渗透测试技术详解" data-subscribe="false" data-title="Kali Linux渗透测试" data-img="https://i-blog.csdnimg.cn/columns/default/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_224,w_224" data-url="https://blog.csdn.net/qq_43233085/category_9594079.html" data-sum="60" data-people="48" data-price="0" data-hotrank="0" data-status="true" data-oldprice="0" data-join="false" data-studyvip="true" data-studysubscribe="false" data-report-view="{&quot;spm&quot;:&quot;1001.2101.3001.6334&quot;,&quot;extend1&quot;:&quot;专栏目录&quot;}" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.6334&quot;,&quot;extend1&quot;:&quot;专栏目录&quot;}">专栏目录</a> 
+        </div> 
+       </div> 
+      </div> 
+     </div>    
+     <a id="commentBox" name="commentBox"></a> 
+    </main> 
+   </div> 
+   <div class="recommend-right1  align-items-stretch clearfix" id="rightAsideConcision" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div id="recommend-right-concision"> 
+      <div class="flex-column aside-box groupfile" id="groupfileConcision"> 
+       <div class="groupfile-div1"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+  </div> 
+  <div class="mask-dark"></div> 
+  <div class="skin-boxshadow"></div> 
+  <div class="directory-boxshadow"></div> 
+  <div style="display:none;"> 
+   <img src="" onerror="setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){var test=&quot;\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74&quot;}},3000);"> 
+  </div> 
+  <div class="keyword-dec-box" id="keywordDecBox"></div> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/chart.css">        
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/cboxEditor/1.1.6/embed-editor.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">                  
+ </body>
+</html>

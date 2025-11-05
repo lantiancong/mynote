@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8"> 
+  <link rel="canonical" href="https://blog.csdn.net/qq_43233085/article/details/103652515"> 
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+  <meta name="renderer" content="webkit"> 
+  <meta name="force-rendering" content="webkit"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
+  <meta name="report" content="{&quot;pid&quot;: &quot;blog&quot;, &quot;spm&quot;:&quot;1001.2101&quot;}"> 
+  <meta name="referrer" content="always"> 
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="alternate" media="handheld" href="#">  
+  <meta name="applicable-device" content="pc"> 
+  <link href="https://g.csdnimg.cn/static/logo/favicon32.ico" rel="shortcut icon" type="image/x-icon"> 
+  <title>Kali学习 | 信息收集：2.9 绘制网络结构图_kali2023中绘制网络拓朴图-CSDN博客</title>  
+  <meta name="keywords" content="kali2023中绘制网络拓朴图"> 
+  <meta name="csdn-baidu-search" content="{&quot;autorun&quot;:true,&quot;install&quot;:true,&quot;keyword&quot;:&quot;kali2023中绘制网络拓朴图&quot;}"> 
+  <meta name="description" content="文章浏览阅读624次。本文介绍了如何在Kali Linux中利用CaseFile工具进行网络结构图的绘制。首先，由于CaseFile需要Java 7环境运行，因此需要通过update-alternatives命令切换到JDK 7。接着详细阐述了启动CaseFile后，逐步创建、编辑和连接网络实体的过程，包括添加注释、设置线条属性等，以构建网络图。
+"> 
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-7d4fe3c84c.min.css">  
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-number/skin-number-2c93789924.min.css">    
+  <meta name="toolbar" content="{&quot;type&quot;:&quot;0&quot;,&quot;fixModel&quot;:&quot;1&quot;}">    
+  <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css"> 
+  <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>      
+ 	<style>
+	main div.blog-content-box pre {
+		max-height: 100%;
+		overflow-y: hidden;
+	}
+	</style>
+ </head>  
+ <body class="nodata  " style=""> 
+  <div id="toolbarBox" style="min-height: 48px;"></div>    
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css"> 
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/swiper/6.0.4/css/swiper.css">   
+  <div class="main_father clearfix d-flex justify-content-center mainfather-concision" style="height:100%;"> 
+   <div class="container clearfix container-concision" id="mainBox">  
+    <main>  
+     <div class="blog-content-box"> 
+      <div class="article-header-box"> 
+       <div class="article-header"> 
+        <div class="article-title-box"> 
+         <h1 class="title-article" id="articleContentId">Kali学习 | 信息收集：2.9 绘制网络结构图</h1> 
+        </div> 
+        <div class="article-info-box"> 
+         <div class="up-time">
+          最新推荐文章于&nbsp;2021-12-07 16:19:30&nbsp;发布
+         </div> 
+         <div class="article-bar-top-box"> 
+          <div class="article-bar-top"> 
+           <img class="article-type-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/original.png" alt=""> 
+           <div class="bar-content"> 
+            <a class="follow-nickName " href="https://blog.csdn.net/qq_43233085" target="_blank" rel="noopener" title="CNwanku">CNwanku</a> 
+            <img class="article-time-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCurrentTime2.png" alt=""> 
+            <span class="time blog-postTime" data-time="2019-12-22 13:35:26">最新推荐文章于&nbsp;2021-12-07 16:19:30&nbsp;发布</span> 
+            <div class="read-count-box"> 
+             <img class="article-read-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/articleReadEyes2.png" alt=""> 
+             <span class="read-count">阅读量624</span> 
+             <a id="blog_detail_zk_collection" class="un-collection" data-report-click="{&quot;mod&quot;:&quot;popu_823&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4232&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img class="article-collect-img article-heard-img un-collect-status isdefault" style="display:inline-block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect2.png" alt=""> <img class="article-collect-img article-heard-img collect-status isactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive2.png" alt=""> <span class="name">收藏</span> <span class="get-collection"> </span> </a> 
+             <div class="read-count-box is-like" data-type="top"> 
+              <img class="article-read-img article-heard-img" style="display:none" id="is-like-imgactive-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Active.png" alt=""> 
+              <img class="article-read-img article-heard-img" style="display:block" id="is-like-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Black.png" alt=""> 
+              <span class="read-count" id="blog-digg-num">点赞数 </span> 
+             </div> 
+            </div> 
+           </div> 
+          </div> 
+          <div class="operating"> 
+           <a class="href-article-edit slide-toggle">CC 4.0 BY-SA版权</a> 
+          </div> 
+         </div> 
+         <div class="blog-tags-box"> 
+          <div class="tags-box artic-tag-box"> 
+           <span class="label">分类专栏：</span> 
+           <a class="tag-link" href="https://blog.csdn.net/qq_43233085/category_9594079.html" target="_blank" rel="noopener">Kali Linux渗透测试</a> 
+           <span class="label">文章标签：</span> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;网络&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;网络\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;网络&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;网络\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=%E7%BD%91%E7%BB%9C&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">网络</a> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;linux&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;linux\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;linux&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;linux\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=linux&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">linux</a> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;kali&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;kali\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;kali&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;kali\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=kali&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">kali</a> 
+           <a rel="noopener" data-report-query="spm=1001.2101.3001.4223" data-report-click="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;安全&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;安全\&quot;}&quot;}" data-report-view="{&quot;mod&quot;:&quot;popu_626&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4223&quot;,&quot;strategy&quot;:&quot;安全&quot;,&quot;ab&quot;:&quot;new&quot;,&quot;extra&quot;:&quot;{\&quot;searchword\&quot;:\&quot;安全\&quot;}&quot;}" class="tag-link" href="https://so.csdn.net/so/search/s.do?q=%E5%AE%89%E5%85%A8&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank">安全</a> 
+          </div> 
+         </div> 
+         <div class="slide-content-box"> 
+          <div class="article-copyright"> 
+           <div class="creativecommons">
+             版权声明：本文为博主原创文章，遵循
+            <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener"> CC 4.0 BY-SA </a>版权协议，转载请附上原文出处链接和本声明。 
+           </div> 
+           <div class="article-source-link">
+             本文链接：
+            <a href="https://blog.csdn.net/qq_43233085/article/details/103652515" target="_blank">https://blog.csdn.net/qq_43233085/article/details/103652515</a> 
+           </div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div id="blogHuaweiyunAdvert" class=""></div> 
+      <div id="blogColumnPayAdvert" class=""> 
+       <div class="column-group"> 
+        <div class="column-group-item column-group0 column-group-item-one"> 
+         <div class="item-l"> 
+          <a class="item-target" href="https://blog.csdn.net/qq_43233085/category_9594079.html" target="_blank" title="Kali Linux渗透测试" data-report-view="{&quot;spm&quot;:&quot;1001.2101.3001.6332&quot;}" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.6332&quot;}"> <img class="item-target" src="https://i-blog.csdnimg.cn/columns/default/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_224,w_224" alt=""> <span class="title item-target"> <span> <span class="tit">Kali Linux渗透测试</span> <span class="dec">专栏收录该内容</span> </span> </span> </a> 
+         </div> 
+         <div class="item-m"> 
+          <span>60 篇文章</span> 
+         </div> 
+         <div class="item-r"> 
+          <a class="item-target article-column-bt articleColumnFreeBt" data-id="9594079">订阅专栏</a> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="ai-abstract-box"> 
+       <div class="ai-abstract"> 
+        <div class="abstract-content"> 
+         <img class="lock-img" src="https://img-home.csdnimg.cn/images/20240711042549.png" alt=""> 本文介绍了如何在Kali Linux中利用CaseFile工具进行网络结构图的绘制。首先，由于CaseFile需要Java 7环境运行，因此需要通过update-alternatives命令切换到JDK 7。接着详细阐述了启动CaseFile后，逐步创建、编辑和连接网络实体的过程，包括添加注释、设置线条属性等，以构建网络图。 
+        </div> 
+        <p> 摘要生成于 <a href="https://ai.csdn.net?utm_source=cknow_pc_ai_abstract" data-report-query="spm=3001.10128" data-report-view="{&quot;spm&quot;:&quot;3001.10128&quot;,&quot;extra&quot;:{&quot;location&quot;:&quot;ai_abstract&quot;}}" data-report-click="{&quot;spm&quot;:&quot;3001.10128&quot;,&quot;extra&quot;:{&quot;location&quot;:&quot;ai_abstract&quot;,&quot;text&quot;:&quot;C知道&quot;}}" target="_blank"> C知道</a> ，由 DeepSeek-R1 满血版支持， <a href="https://ai.csdn.net?utm_source=cknow_pc_ai_abstract" data-report-query="spm=3001.10128" data-report-click="{&quot;spm&quot;:&quot;3001.10128&quot;,&quot;extra&quot;:{&quot;location&quot;:&quot;ai_abstract&quot;,&quot;text&quot;:&quot;前往体验&quot;}}" target="_blank"> 前往体验 &gt;</a></p> 
+       </div> 
+      </div> 
+      <article class="baidu_pl"> 
+       <div id="article_content" class="article_content clearfix"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css"> 
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-8d6d398833.css"> 
+        <div id="content_views" class="markdown_views prism-atom-one-dark"> 
+         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"> 
+          <path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path> 
+         </svg> 
+         <p></p> 
+         <div class="toc"> 
+          <h4>Kali学习 | 信息收集：2.9 绘制网络结构图</h4> 
+          <ul>
+           <li><a href="#_1">介绍</a></li>
+           <li><a href="#JDK_9">改变JDK版本</a></li>
+           <li><a href="#CaseFile_29">使用CaseFile工具绘制一个网络结构图</a></li>
+          </ul> 
+         </div> 
+         <p></p> 
+         <h2><a id="_1"></a>介绍</h2> 
+         <p><strong>CaseFile工具用来绘制网络结构图。<br> 使用该工具能快速添加和连接，并能以图形界面形式灵活的构建网络结构图</strong>。</p> 
+         <p>在使用CaseFile工具之前，需要修改系统使用的Java和Javac版本。<br> <strong>因为CaseFile工具是用Java开发的，而且该工具必须运行在Javal.7.0版本上。<br> 但是在Kali Linux中，安装了JDK6和JDK7，而CaseFile默认使用的是JDK6。</strong><br> 此时运行CaseFile工具后，图形界面无法显示菜单栏。</p> 
+         <h2><a id="JDK_9"></a>改变JDK版本</h2> 
+         <p><strong>使用update-alternatives命令修改java命令版本</strong>。执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">update-alternatives --config java
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/ea408a93aa45b21ce1bc1fc96c0dc285.png" alt="在这里插入图片描述"><br> 从输出的信息中可以看到已经修改为JDK7版本，而且是手动模式。或者<strong>使用java命令查看当前的版本信息</strong>，执行命令如下所示：<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/d877947cc1ddbe529ac1f31b8f452538.png" alt="在这里插入图片描述"><br> 从以上结果中可以确定当前系统的java命令版本是1.7.0。</p> 
+         <p><strong>使用update-alternatives命令修改javac命令版本</strong>。执行命令如下所示：</p> 
+         <pre><code class="prism language-bash">update-alternatives --config javac
+</code ></pre> 
+         <p><img src="https://i-blog.csdnimg.cn/blog_migrate/31a2864860a808ddc8b5cdcb045dc3d7.png" alt="在这里插入图片描述"><br> 从输出的信息中可以看到已经修改为JDK7版本，而且是手动模式。这时，<strong>再使用javac命令查看当前的版本信息</strong>，执行命令如下所示：<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/d02854a06a1f28cf3e7d55761e8f3b4c.png" alt="在这里插入图片描述"><br> 从以上结果中可以确定当前系统的javac命令版本是1.7.0。</p> 
+         <h2><a id="CaseFile_29"></a>使用CaseFile工具绘制一个网络结构图</h2> 
+         <p>（1）<strong>启动CaseFile</strong>。依次选择 “应用程序” | Kali Linux l “信息收集” | “情报分析” I casefile 命令，将显示如图所示的界面。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/5eaf7a66fa8d294babdcbbb6a3736857.png" alt="在这里插入图片描述"><br> （2）该界面是一个欢迎信息，这里<strong>单击Next按钮</strong>，将显示如图所示的界面。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/cb341c7321831c9f6b01df930350fd5a.png" alt="在这里插入图片描述"><br> （3）该界面选择将要进行什么操作。<strong>这里选择Open a blank graph and let me play around然后单击Finish按钮</strong>，将显示如图所示的界面。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/26f73bfd9dce864c3e2b51556723257d.png" alt="在这里插入图片描述"><br> （4）从该界面可以看到没有任何信息，因为默认没有选择任何设备。该工具和Maltego工具一样，需要从组件Palette中拖史每个实体到图表中。<strong>本例中选择拖曳域实体，并且改变域属性</strong>，如图所示。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/51302186d99958b1749a594dae9e1a48.png" alt="在这里插入图片描述"><br> （5）<strong>在该界面可以为域添加一个注释</strong>。将鼠标指到域实体上，然后双击注释图标，将显示如图所示的界面。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/dda333ed324393e901c8705f50846af5.png" alt="在这里插入图片描述"><br> （6）在该界面可以看到添加的注释信息，该信息可以修改。将鼠标点到注释信息的位置即可修改。<strong>在该界面还可以拖曳其他实体，这里拖另一个实体域名，用来记录来自目标主机的DNS信息</strong>，如图所示。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/afdce0216a8b5f5523d26b99aa02328e.png" alt="在这里插入图片描述"><br> （7）在该界面可以将这两个实体连接起来。<strong>只需要拖一个线，从一个实体到另一个实体即可</strong>，如图所示。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/1f54bf7dc1124b70f10fc241fda406fd.png" alt="在这里插入图片描述"><br> （8）连接两个实体后，将显示如图所示的界面。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/39eb49ada33118f5e8564ad21f840328.png" alt="在这里插入图片描述"><br> （9）该界面用来设置线条的属性。可以修改线的粗细、格式和颜色等。<br> （10）<strong>重复以上第（5）、（6）、（7）和（8）步骤添加更多信息，来绘制网络图</strong>。下面绘制一个简单的组织网络结构图，如图所示。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/1113dc15ceb242ae80fb606889270a91.png" alt="在这里插入图片描述"><br> （11）从该界面可以看到一个组织网络结构图。<strong>此时用户可以保存该图</strong>，如果需要的时候，以后可以打开并编辑该图。<strong>如果需要重新打开一个Graph窗口，可以单击左上角的图标</strong>，如图所示。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/804c16625121e4e514df7e0859336632.png" alt="在这里插入图片描述"><br> <strong>在该界面单击New按钮，将会创建一个新的Graph</strong>，此时会命名为New Graph（2），如图所示。<br> <img src="https://i-blog.csdnimg.cn/blog_migrate/e74b0fc3da70f842e9a7e51f44f84e49.png" alt="在这里插入图片描述"></p> 
+         <p><strong>参考书籍：《Kali Linux渗透测试技术详解》</strong></p> 
+        </div> 
+        <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/markdown_views-0291849095.css" rel="stylesheet"> 
+        <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/style-e504d6a974.css" rel="stylesheet"> 
+       </div> 
+      </article>   
+      <img src="https://img-home.csdnimg.cn/images/20211209110851.png" alt="pdf_watermark" width="0" height="0" style="display: none"> 
+      <div class="print_watermark"></div> 
+      <div class="print_watermark_info"> 
+       <p>内容来源：csdn.net</p> 
+       <p>作者昵称：CNwanku</p> 
+       <p>原文链接：https://blog.csdn.net/qq_43233085/article/details/103652515</p> 
+       <p>作者主页：https://blog.csdn.net/qq_43233085</p> 
+      </div> 
+      <style>
+    .print_watermark, .print_watermark_info {
+      display: none
+    }
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact; /* Chrome, Safari */
+        color-adjust: exact; /* Firefox */
+        background-image: none !important;
+      }
+      * {
+        -webkit-print-color-adjust: exact;
+      }
+      .blog-content-box {
+        padding: 0;
+      }
+      .blog-content-box .article-header .article-info-box > div:not(.article-bar-top){
+        display: none !important;
+      }
+      .blog-content-box .article-header .article-info-box  .article-bar-top img{
+          display:none
+      }
+      .blog-content-box .article-header .article-info-box > .article-bar-top .bar-content > *:not(.follow-nickName):not(.time){
+          display: none !important;
+      }
+      .print_watermark {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 999;
+        background-image: url('https://img-home.csdnimg.cn/images/20211209110851.png');
+        background-size: 180px auto;
+        background-repeat: repeat;
+      }
+      .print_watermark_info {
+        display: block;
+        position: fixed;
+        bottom: 16px;
+        right: 0;
+        z-index: 1000;
+        color: #e8e8ed;
+        font-size: 12px;
+        ocapity: .5
+      }
+      @page {
+        margin: 0 10mm 10mm;
+        size: landscape;
+      }
+      body, article {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #csdn-toolbar,.main_father > *:not(#mainBox), .csdn-side-toolbar, .main_father aside {
+        display: none !important;
+      }
+      .main_father > #mainBox {
+        width: unset
+      }
+      .main_father > #mainBox > main > *:not(.blog-content-box){
+        display: none !important;
+      }
+    }
+  </style> 
+     </div> 
+     <div class="directory-boxshadow-dialog" style="display:none;"> 
+      <div class="directory-boxshadow-dialog-box"> 
+      </div> 
+      <div class="vip-limited-time-offer-box-new" id="vip-limited-time-offer-box-new"> 
+       <img class="limited-img limited-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-newWhite.png"> 
+       <div class="vip-limited-time-top">
+         确定要放弃本次机会？ 
+       </div> 
+       <span class="vip-limited-time-text">福利倒计时</span> 
+       <div class="limited-time-box-new"> 
+        <span class="time-hour"></span> 
+        <i>:</i> 
+        <span class="time-minite"></span> 
+        <i>:</i> 
+        <span class="time-second"></span> 
+       </div> 
+       <div class="limited-time-vip-box"> 
+        <p> <img class="coupon-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-roup.png"> <span class="def">立减 ¥</span> <span class="active limited-num"></span> </p> 
+        <span class="">普通VIP年卡可用</span> 
+       </div> 
+       <a class="limited-time-btn-new" href="https://mall.csdn.net/vip" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.9621&quot;}" data-report-query="spm=1001.2101.3001.9621">立即使用</a> 
+      </div> 
+     </div> 
+     <div class="more-toolbox-new more-toolbar" id="toolBarBox"> 
+      <div class="left-toolbox"> 
+       <div class="toolbox-left"> 
+        <div class="profile-box"> 
+         <a class="profile-href" target="_blank" href="https://blog.csdn.net/qq_43233085"><img class="profile-img" src="https://profile-avatar.csdnimg.cn/dd3fa81433184314ba820899e880f86f_qq_43233085.jpg!1"> <span class="profile-name"> CNwanku </span> </a> 
+        </div> 
+        <div class="profile-attend"> 
+         <a class="tool-attend tool-bt-button tool-bt-attend" href="javascript:;" data-report-view="{&quot;mod&quot;:&quot;1592215036_002&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4232&quot;,&quot;extend1&quot;:&quot;已关注&quot;}">已关注</a> 
+         <a class="tool-item-follow active-animation" style="display:none;">已关注</a> 
+        </div> 
+       </div> 
+       <div class="toolbox-middle"> 
+        <ul class="toolbox-list"> 
+         <li class="tool-item tool-item-size tool-active is-like" id="is-like" data-type="bottom"> <a class="tool-item-href"> <img style="display:none;" id="is-like-imgactive-animation-like" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png" alt=""> <img class="isactive" style="display:none" id="is-like-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like-active.png" alt=""> <img class="isdefault" style="display:block" id="is-like-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like.png" alt=""> <span id="spanCount" class="count "> 0 </span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">点赞</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-unlike" id="is-unlike"> <a class="tool-item-href"> <img class="isactive" style="margin-right:0px;display:none" id="is-unlike-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike-active.png" alt=""> <img class="isdefault" style="margin-right:0px;display:block" id="is-unlike-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike.png" alt=""> <span id="unlikeCount" class="count "></span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">踩</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-collection "> <a class="tool-item-href" href="javascript:;" data-report-click="{&quot;mod&quot;:&quot;popu_824&quot;,&quot;spm&quot;:&quot;1001.2101.3001.4130&quot;,&quot;ab&quot;:&quot;new&quot;}"> <img style="display:none" id="is-collection-img-collection" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect-active.png" alt=""> <img class="isdefault" id="is-collection-img" style="display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect.png" alt=""> <img class="isactive" id="is-collection-imgactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png" alt=""> <span class="count get-collection " data-num="0" id="get-collection"> 0 </span> </a> 
+          <div class="tool-hover-tip collect"> 
+           <div class="collect-operate-box"> 
+            <span class="collect-text" id="is-collection"> 收藏 </span> 
+           </div> 
+          </div> 
+          <div class="tool-active-list"> 
+           <div class="text">
+             觉得还不错? 
+            <span class="collect-text" id="tool-active-list-collection"> 一键收藏 </span> 
+            <img id="tool-active-list-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/collectionCloseWhite.png" alt=""> 
+           </div> 
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-item-comment"> 
+          <div class="guide-rr-first"> 
+           <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward01.png" alt=""> 
+           <button class="btn-guide-known">知道了</button> 
+          </div> <a class="tool-item-href go-side-comment" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.7009&quot;}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/comment.png" alt=""> <span class="count"> 0 </span> </a> 
+          <div class="tool-hover-tip">
+           <span class="text space">评论</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-QRcode" data-type="article" id="tool-share"> <a class="tool-item-href" href="javascript:;" data-report-view="{&quot;spm&quot;:&quot;3001.4129&quot;,&quot;extra&quot;:{&quot;type&quot;:&quot;blogdetail&quot;}}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/share.png" alt=""> <span class="count">分享</span> </a> 
+          <div class="QRcode" id="tool-QRcode"> 
+           <div class="share-bg-box"> 
+            <div class="share-content"> 
+             <a id="copyPosterUrl" data-type="link" class="btn-share">复制链接</a> 
+            </div> 
+            <div class="share-content"> 
+             <a class="btn-share" data-type="qq">分享到 QQ</a> 
+            </div> 
+            <div class="share-content"> 
+             <a class="btn-share" data-type="weibo">分享到新浪微博</a> 
+            </div> 
+            <div class="share-code"> 
+             <div class="share-code-box" id="shareCode"></div> 
+             <div class="share-code-text"> 
+              <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/share/icon-wechat.png" alt="">扫一扫 
+             </div> 
+            </div> 
+           </div> 
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active tool-downloadpdf" id="tool-downloadpdf"> <a class="tool-item-href" data-report-click="{&quot;spm&quot;:&quot;3001.6881&quot;,&quot;extra&quot;:&quot;{\&quot;type\&quot;:\&quot;hide\&quot;}&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.6881&quot;,&quot;extra&quot;:&quot;{\&quot;type\&quot;:\&quot;hide\&quot;}&quot;}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/pdf.png" alt=""> </a> 
+          <div class="tool-hover-tip">
+           <span class="text">导出PDF</span>
+          </div> </li> 
+         <li class="tool-item tool-item-size tool-active is-more" id="is-more"> <a class="tool-item-href"> <img class="isdefault" style="margin-right:0px;display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/more.png" alt=""> <span class="count"></span> </a> 
+          <div class="more-opt-box"> 
+           <div class="mini-box"> 
+            <a class="tool-item-href" data-report-click="{&quot;spm&quot;:&quot;3001.6881&quot;,&quot;extra&quot;:&quot;{\&quot;type\&quot;:\&quot;hide\&quot;}&quot;}" data-report-view="{&quot;spm&quot;:&quot;3001.6881&quot;,&quot;extra&quot;:&quot;{\&quot;type\&quot;:\&quot;hide\&quot;}&quot;}"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/pdf.png" alt=""> <span class="count">导出PDF</span> </a> 
+            <a class="tool-item-href" id="toolReportBtnHide"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt=""> <span class="count">举报</span> </a> 
+           </div> 
+           <div class="normal-box"> 
+            <a class="tool-item-href" id="toolReportBtnHideNormal"> <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt=""> <span class="count">举报</span> </a> 
+           </div> 
+          </div> </li> 
+        </ul> 
+       </div> 
+       <div class="toolbox-right"> 
+        <div class="tool-directory"> 
+         <a class="bt-columnlist-show" data-id="9594079" data-free="true" data-description="Kali Linux渗透测试技术详解" data-subscribe="false" data-title="Kali Linux渗透测试" data-img="https://i-blog.csdnimg.cn/columns/default/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_224,w_224" data-url="https://blog.csdn.net/qq_43233085/category_9594079.html" data-sum="60" data-people="48" data-price="0" data-hotrank="0" data-status="true" data-oldprice="0" data-join="false" data-studyvip="true" data-studysubscribe="false" data-report-view="{&quot;spm&quot;:&quot;1001.2101.3001.6334&quot;,&quot;extend1&quot;:&quot;专栏目录&quot;}" data-report-click="{&quot;spm&quot;:&quot;1001.2101.3001.6334&quot;,&quot;extend1&quot;:&quot;专栏目录&quot;}">专栏目录</a> 
+        </div> 
+       </div> 
+      </div> 
+     </div>    
+     <a id="commentBox" name="commentBox"></a> 
+    </main> 
+   </div> 
+   <div class="recommend-right1  align-items-stretch clearfix" id="rightAsideConcision" data-type="recommend"> 
+    <aside class="recommend-right_aside"> 
+     <div id="recommend-right-concision"> 
+      <div class="flex-column aside-box groupfile" id="groupfileConcision"> 
+       <div class="groupfile-div1"> 
+        <h3 class="aside-title">目录</h3> 
+        <div class="align-items-stretch group_item"> 
+         <div class="pos-box"> 
+          <div class="scroll-box"> 
+           <div class="toc-box"></div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </aside> 
+   </div> 
+  </div> 
+  <div class="mask-dark"></div> 
+  <div class="skin-boxshadow"></div> 
+  <div class="directory-boxshadow"></div> 
+  <div style="display:none;"> 
+   <img src="" onerror="setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){var test=&quot;\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74&quot;}},3000);"> 
+  </div> 
+  <div class="keyword-dec-box" id="keywordDecBox"></div> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/chart.css">        
+  <link rel="stylesheet" href="https://g.csdnimg.cn/lib/cboxEditor/1.1.6/embed-editor.min.css"> 
+  <link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">                  
+ </body>
+</html>
